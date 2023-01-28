@@ -98,11 +98,11 @@ Abrufen der aktuellen Notiz
 ### Methodenaufruf und Parameter
 ```cpp
 /**
- * QML wrapper to get the current note
- *
- * @returns {NoteApi} the current note object
- */
-NoteApi currentNote();
+     * QML-Wrapper, um die aktuelle Notiz zu erhalten
+     *
+     * @retourniert {NoteApi} das aktuelle Notizobjekt
+     */
+NoteApi currentNote ();
 ```
 
 ### Beispiel
@@ -360,7 +360,7 @@ script.registerLabel ("long-label", "ein anderer sehr langer Text, ein anderer s
 script.registerLabel ("counter-label");
 ```
 
-Die Beschriftungen werden im Skript-Dock-Widget angezeigt.
+Die Labels sind im *Skript-Bedienfeld* sichtbar, das Sie im Menü *Fenster / Bedienfelder* aktivieren müssen.
 
 Sie können sowohl einfachen Text als auch HTML in den Beschriftungen verwenden. Der Text kann ausgewählt werden und Links können angeklickt werden.
 
@@ -523,8 +523,8 @@ Wählen Sie das aktuelle Wort in der Notiztextbearbeitung aus
 ### Methodenaufruf und Parameter
 ```cpp
 /**
- * Wählt die aktuelle Zeile in der Notiztextbearbeitung aus
- */
+  * Wählt das aktuelle Wort in der Notiztextbearbeitung aus
+  */
 void ScriptingService::noteTextEditSelectCurrentWord();
 ```
 
@@ -920,17 +920,21 @@ Zu einer Notiz springen
 ### Methodenaufruf und Parameter
 ```cpp
 /**
-    * Legt die aktuelle Notiz fest, wenn die Notiz in der Notizliste sichtbar ist
-    *
-    * @param note NoteApi note to jump to
-    */
-void ScriptingService::setCurrentNote(NoteApi *note);
+ * Sets the current note if the note is visible in the note list
+ *
+ * @param note NoteApi note to jump to
+ * @param asTab bool if true the note will be opened in a new tab (if not already open)
+ */
+void ScriptingService::setCurrentNote(NoteApi *note, bool asTab = false);
 ```
 
 ### Beispiel
 ```js
-// zur Notiz springen
+// jump to the note
 script.setCurrentNote(note);
+
+// open note in new tab (if not already open)
+script.setCurrentNote(note, true);
 ```
 
 Vielleicht möchten Sie sich das Beispiel ansehen [journal-entry.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/journal-entry.qml).
@@ -1075,19 +1079,20 @@ Der Benutzer kann diese Eigenschaften dann in den Skripteinstellungen festlegen.
 
 ### Beispiel
 ```js
-// Sie müssen Ihre registrierten Variablen definieren, damit Sie später darauf zugreifen können
+// you have to define your registered variables so you can access them later
 property string myString;
 property bool myBoolean;
 property string myText;
 property int myInt;
 property string myFile;
+property string myDirectory;
 property string mySelection;
 
-// Registrieren Sie Ihre Einstellungsvariablen, damit der Benutzer sie in den Skripteinstellungen festlegen kann
+// register your settings variables so the user can set them in the script settings
 //
-// leider gibt es kein QVariantHash in Qt, wir können es nur verwenden
-// QVariantMap (die keine willkürliche Reihenfolge hat) oder QVariantList (die bei
-// am wenigsten beliebig bestellbar)
+// unfortunately there is no QVariantHash in Qt, we only can use
+// QVariantMap (that has no arbitrary ordering) or QVariantList (which at
+// least can be ordered arbitrarily)
 property variant settingsVariables: [
     {
         "identifier": "myString",
@@ -1124,6 +1129,13 @@ property variant settingsVariables: [
         "description": "Please select the file:",
         "type": "file",
         "default": "pandoc",
+    },
+    {
+        "identifier": "myDirectory",
+        "name": "I am a directory selector",
+        "description": "Please select the directory:",
+        "type": "directory",
+        "default": "/home",
     },
     {
         "identifier": "mySelection",
@@ -1552,42 +1564,42 @@ Sie können Sockets auch mit `WebSocket` abhören. Bitte schauen Sie sich das Be
 
 Beachten Sie, dass Sie die QML `Websocket`-Bibliothek von Qt installiert haben müssen, um dies zu verwenden. Unter Ubuntu Linux können Sie beispielsweise `qml-module-qtwebsockets` installieren.
 
-Adding a highlighting rule for the editor
+Hinzufügen einer Hervorhebungsregel für den Editor
 -----------------------------------------
 
-You can directly inject highlighting rules into the editor by defining regular expressions and assigning them to a highlighting state.
+Sie können Hervorhebungsregeln direkt in den Editor einfügen, indem Sie reguläre Ausdrücke definieren und ihnen einen Hervorhebungszustand zuweisen.
 
-### Method call and parameters
+### Methodenaufruf und Parameter
 ```cpp
 /**
- * Adds a highlighting rule to the syntax highlighter of the editor
- *
- * @param pattern {QString} the regular expression pattern to highlight
- * @param shouldContain {QString} a string that must be contained in the highlighted text for the pattern to be parsed
- * @param state {int} the state of the syntax highlighter to use
- * @param capturingGroup {int} the capturing group for the pattern to use for highlighting (default: 0)
- * @param maskedGroup {int} the capturing group for the pattern to use for masking (default: 0)
- */
+  * Fügt dem Syntax-Highlighter des Editors eine Hervorhebungsregel hinzu
+  *
+  * @param pattern {QString} das hervorzuhebende reguläre Ausdrucksmuster
+  * @param shouldContain {QString} eine Zeichenfolge, die im hervorgehobenen Text enthalten sein muss, damit das Muster analysiert werden kann
+  * @param state {int} der Zustand des zu verwendenden Syntax-Highlighters
+  * @param capturingGroup {int} die Erfassungsgruppe für das Muster, das zum Hervorheben verwendet werden soll (Standard: 0)
+  * @param maskedGroup {int} die Erfassungsgruppe für das Muster, das zum Maskieren verwendet werden soll (Standard: 0)
+  */
 void ScriptingService::addHighlightingRule(const QString &pattern,
-                                           const QString &shouldContain,
-                                           int state,
-                                           int capturingGroup,
-                                           int maskedGroup);
+                                            const QString &shouldContain,
+                                            int-Zustand,
+                                            int Erfassungsgruppe,
+                                            int maskierteGruppe);
 ```
 
-### Highlighting states
+### Hervorhebungsarten
 
 | Name                       | Nr. |
 | -------------------------- | --- |
 | NoState                    | -1  |
 | Link                       | 0   |
-| Image                      | 3   |
+| Bild                       | 3   |
 | CodeBlock                  | 4   |
 | CodeBlockComment           | 5   |
-| Italic                     | 7   |
-| Bold                       | 8   |
-| List                       | 9   |
-| Comment                    | 11  |
+| Kursiv                     | 7   |
+| Fett                       | 8   |
+| Liste                      | 9   |
+| Kommentar                  | 11  |
 | H1                         | 12  |
 | H2                         | 13  |
 | H3                         | 14  |
@@ -1596,7 +1608,7 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
 | H6                         | 17  |
 | BlockQuote                 | 18  |
 | HorizontalRuler            | 21  |
-| Table                      | 22  |
+| Tabelle                    | 22  |
 | InlineCodeBlock            | 23  |
 | MaskedSyntax               | 24  |
 | CurrentLineBackgroundColor | 25  |
@@ -1607,15 +1619,15 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
 | CheckBoxChecked            | 30  |
 | StUnderline                | 31  |
 
-### Example
+### Beispiel
 ```js
-// Highlight a text line like "BLOCK: some text" as blockquote (state 18)
+// Hervorheben einer Textzeile wie "BLOCK: irgendein Text" als Blockquote (Zustand 18)
 script.addHighlightingRule("^BLOCK: (.+)", "BLOCK:", 18);
 
-// Mask out (state 24) all characters after 32 characters in a line
-// capturingGroup 1 means the expression from the first bracketed part of the pattern will be highlighted
-// maskedGroup -1 means that no masking should be done
+// Maskiere (Zustand 24) alle Zeichen nach 32 Zeichen in einer Zeile
+// capturingGroup 1 bedeutet, dass der Ausdruck aus dem ersten eingeklammerten Teil des Musters hervorgehoben wird
+// maskedGroup -1 bedeutet, dass keine Maskierung erfolgen soll
 script.addHighlightingRule("^.{32}(.+)", "", 24, 1, -1);
 ```
 
-You can also take a look at the examples in [highlighting.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/highlighting.qml).
+Sie können sich auch die Beispiele in ansehen [highlighting.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/highlighting.qml).

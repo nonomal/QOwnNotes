@@ -26,7 +26,6 @@ class QOwnNotesMarkdownTextEdit : public QMarkdownTextEdit {
     void openUrl(const QString &urlString) override;
     //    void setViewportMargins(int left, int top, int right, int bottom);
     void setPaperMargins(int width = -1);
-    void setMainWindow(MainWindow *mainWindow);
     int modifyFontSize(FontModificationMode mode);
     void updateSettings();
     QMargins viewportMargins();
@@ -37,8 +36,8 @@ class QOwnNotesMarkdownTextEdit : public QMarkdownTextEdit {
     bool usesMonospacedFont();
 
     /**
-    * Toggles the case of the word under the Cursor or the selected text
-    */
+     * Toggles the case of the word under the Cursor or the selected text
+     */
     void toggleCase();
 
     /**
@@ -81,6 +80,8 @@ class QOwnNotesMarkdownTextEdit : public QMarkdownTextEdit {
      */
     bool autoComplete(QStringList &resultList) const;
 
+    QSize minimumSizeHint() const;
+
    protected:
     // we must not override _highlighter or Windows will create a
     // QOwnNotesMarkdownHighlighter and MarkdownHighlighter instance
@@ -91,7 +92,6 @@ class QOwnNotesMarkdownTextEdit : public QMarkdownTextEdit {
     bool eventFilter(QObject *obj, QEvent *event) override;
 
    private:
-    MainWindow *mainWindow = nullptr;
     bool _isSpellCheckingDisabled = false;
 
     /// @param in is true if zoom-in, false otherwise

@@ -1,6 +1,6 @@
 # Parámetros de la interfaz de línea de comandos
 
-Puede utilizar estos parámetros en la interfaz de línea de comandos:
+Puede utilizar estos parámetros en la interfaz de línea de comandos (CLI) para controlar el comportamiento de la aplicación:
 
 | Parámetro                    | Descripción                                                                                                                               |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |

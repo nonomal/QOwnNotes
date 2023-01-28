@@ -1,12 +1,14 @@
 # تبرّع
 
-QOwnNotes لا ينتج أي عائد (غير ربحي).
+QOwnNotes لا ينتج أي عائد (أي أنه غير ربحي).
 
 إذا أعجبك QOwnNotes وتريد أن **تتبرع** للمشروع للمساعدة في الاستضافة والنطاق وغيرهما، لا تتردد في فعل ذلك.
 
-## PayPal
+## باي بال PayPal
 
-يمكنك **التبرع بالمال عبر PayPal** بالضغط على هذا الزر:
+يمكنك **التبرع بالمال عبر باي بال** على [حساب pbek على باي بال](https://paypal.me/pbek):
+
+وللتبرع شهريا، يمكنك الضغط على الزر التالي (سيحصل باي بال على نسبة من التبرع):
 
 <form id="paypal-donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
     <input type="hidden" name="cmd" value="_s-xclick">
@@ -16,13 +18,17 @@ QOwnNotes لا ينتج أي عائد (غير ربحي).
     <img alt="" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
 </form>
 
-## Liberapay
+## GitHub Sponsors
 
-يمكنك **التبرع بالمال عبر Liberapay** بالضغط على هذا الزر:
+يمكنك **دعمنا عبر GitHub Sponsors** بدعم [pbek على GitHub Sponsors](https://github.com/sponsors/pbek).
+
+## ليبراباي Liberapay
+
+يمكنك **التبرع بالمال عبر ليبراباي** بالضغط على هذا الزر:
 
 <a href="https://liberapay.com/pbek/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
-## Bitcoin
+## بيتكوين Bitcoin
 
 يمكنك **التبرع بـ Bitcoin BTC** على عنوان Bitcoin BTC هذا:
 
@@ -36,7 +42,7 @@ QOwnNotes لا ينتج أي عائد (غير ربحي).
 qpk3m6putywwad9sycz9hny5azs7dz67x5jrqmcelq
 ```
 
-## Ethereum
+## إيثريوم Ethereum
 
 يمكنك **التبرع بـ Ethereum ETH** على عنوان Ethereum ETH هذا:
 

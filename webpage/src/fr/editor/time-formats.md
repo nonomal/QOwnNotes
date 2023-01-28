@@ -2,6 +2,8 @@
 
 Vous pouvez utiliser votre propre format d'heure lors de l'insertion de l'heure actuelle dans une note.
 
+Vous pouvez utiliser cette page pour personnaliser le format d'horodatage par défaut. Vous pouvez entrer cette chaîne dans _Note_ > _Préférences_ > _Éditeur_ > _Insérer la date et l'heure actuelles_.
+
 ## Expressions pour la date
 
 | Expression | Production                                                                            |
@@ -46,9 +48,9 @@ Vous pouvez utiliser votre propre format d'heure lors de l'insertion de l'heure 
 | `h:m:s ap`         | 2:13:9 pm        |
 
 ::: tip Info
-Jetez un œil à la [documentation Qt](http://doc.qt.io/qt-5/qdatetime.html#toString) pour plus d'informations sur les formats d'heure.
+Jetez un œil à la [documentation Qt](http://doc.qt.io/qt-5/qdatetime.html#toString) pour plus d'informations à propos des formats d'horodatage.
 :::
 
 ::: tip
-Si vous devez effectuer des opérations plus complexes pour afficher l'heure actuelle, veuillez envisager de créer une [action personnalisée](../scripting/methods-and-objects.md#registering-a-custom-action).
+Si vous devez effectuer des opérations plus complexes pour afficher la date ou l'heure courantes, envisagez de créer une [action personnalisée](../scripting/methods-and-objects.md#registering-a-custom-action).
 :::

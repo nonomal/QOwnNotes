@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,7 @@ class WebSocketTokenDialog;
 class WebSocketServerService : public QObject {
     Q_OBJECT
    public:
-    explicit WebSocketServerService(quint16 port = 0,
-                                    QObject *parent = nullptr);
+    explicit WebSocketServerService(quint16 port = 0, QObject *parent = nullptr);
     ~WebSocketServerService() override;
 
     quint16 getPort() const;
@@ -60,13 +59,15 @@ class WebSocketServerService : public QObject {
     QList<QWebSocket *> m_clients;
     quint16 m_port{};
 
-    static QString getBookmarksJsonText() ;
+    static QString getBookmarksJsonText();
 
     static QString getCommandSnippetsJsonText();
 
-    static QString getNoteFolderSwitchedJsonText(bool switched) ;
+    static QString getNoteFolderSwitchedJsonText(bool switched);
 
-    static QString getTokenQueryJsonText() ;
+    static QString getTokenQueryJsonText();
+
+    static QString getNoteFoldersJsonText();
 
 #ifndef INTEGRATION_TESTS
     WebSocketTokenDialog *_webSocketTokenDialog;

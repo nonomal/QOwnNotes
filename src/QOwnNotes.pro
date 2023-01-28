@@ -6,10 +6,6 @@
 
 QT       += core gui widgets sql svg network xml printsupport qml websockets concurrent
 
-lessThan(QT_MAJOR_VERSION, 6) {
-    QT += xmlpatterns
-}
-
 # quick is enabled for more scripting options
 # Windows and macOS seem to ignore that
 #QT       += quick
@@ -102,13 +98,17 @@ TRANSLATIONS = languages/QOwnNotes_en.ts \
     languages/QOwnNotes_sq.ts
 
 CODECFORTR = UTF-8
-CONFIG += c++11
+lessThan(QT_MAJOR_VERSION, 6) {
+    CONFIG += c++11
 
-# for older Qt versions
-win32-msvc {
-    QMAKE_CXXFLAGS += "/std:c++11"
+    # for older Qt versions
+    win32-msvc {
+        QMAKE_CXXFLAGS += "/std:c++11"
+    } else {
+        QMAKE_CXXFLAGS += "-std=c++11"
+    }
 } else {
-    QMAKE_CXXFLAGS += "-std=c++11"
+    CONFIG += c++17
 }
 
 INCLUDEPATH += $$PWD/libraries $$PWD/libraries/diff_match_patch
@@ -123,9 +123,9 @@ SOURCES += main.cpp\
     libraries/simplecrypt/simplecrypt.cpp \
     libraries/versionnumber/versionnumber.cpp \
     libraries/botan/botanwrapper.cpp \
-    libraries/md4c/md4c/md4c.c \
-    libraries/md4c/md2html/render_html.c \
-    libraries/md4c/md2html/entity.c \
+    libraries/md4c/src/md4c.c \
+    libraries/md4c/src/md4c-html.c \
+    libraries/md4c/src/entity.c \
     dialogs/aboutdialog.cpp \
     dialogs/linkdialog.cpp \
     dialogs/notediffdialog.cpp \

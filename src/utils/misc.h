@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
 
 #pragma once
 
+#include <QHash>
+#include <QMetaType>
 #include <QString>
 #include <QStringList>
 #include <QVector>
-#include <QHash>
-#include <QMetaType>
 
 struct TerminalCmd;
 class QFile;
@@ -71,8 +71,7 @@ bool startDetachedProcess(const QString &executablePath,
 bool openFilesWithApplication(const QString &executablePath,
                               const QStringList &files = QStringList(),
                               QString workingDirectory = QLatin1String(""));
-QString shorten(QString text, int length,
-                const QString &sequence = QStringLiteral("..."));
+QString shorten(QString text, int length, const QString &sequence = QStringLiteral("..."));
 QString cycleTextCase(const QString &text);
 QString toSentenceCase(const QString &text);
 QString toStartCase(const QString &text);
@@ -82,13 +81,11 @@ void waitMsecs(int msecs);
 QString portableDataPath();
 bool isInPortableMode();
 bool isAppImage();
-QString prependPortableDataPathIfNeeded(QString path,
-                                        bool ifNotEmptyOnly = false);
+QString prependPortableDataPathIfNeeded(QString path, bool ifNotEmptyOnly = false);
 QString makePathRelativeToPortableDataPathIfNeeded(QString path);
 QString htmlToMarkdown(QString text);
 QString parseTaskList(const QString &html, bool clickable);
-QByteArray startSynchronousProcess(const QString &executablePath,
-                                   const QStringList &parameters,
+QByteArray startSynchronousProcess(const QString &executablePath, const QStringList &parameters,
                                    const QByteArray &data = QByteArray(),
                                    const QString &workingDirectory = "");
 bool startSynchronousResultProcess(TerminalCmd &cmd);
@@ -135,18 +132,17 @@ void transformNextcloudPreviewImages(QString &html, int maxImageWidth,
                                      ExternalImageHash *externalImageHash);
 void transformRemotePreviewImages(QString &html, int maxImageWidth,
                                   ExternalImageHash *externalImageHash);
-QString remotePreviewImageTagToInlineImageTag(QString imageTag,
-                                              int &imageWidth);
+QString remotePreviewImageTagToInlineImageTag(QString imageTag, int &imageWidth);
 QString createUuidString();
 QString localDictionariesPath();
 QByteArray generateFileSha1Signature(const QString &path);
 bool isSameFile(const QString &path1, const QString &path2);
 QString generateRandomString(int length = 8);
-QString makeFileNameRandom(const QString &fileName,
-                           const QString &overrideSuffix = "");
-QString findAvailableFileName(const QString &fileName,
-                              const QString &directoryPath,
+QString makeFileNameRandom(const QString &fileName, const QString &overrideSuffix = "");
+QString findAvailableFileName(const QString &filePath, const QString &directoryPath,
                               const QString &overrideSuffix = "");
+bool fileNameExists(const QString &fileName, const QString &directoryPath);
+QString fileNameForPath(const QString &filePath);
 QString rstrip(const QString &str);
 bool isPreviewUseEditorStyles();
 QString previewFontString();
@@ -162,12 +158,13 @@ void switchToLightMode();
 void unescapeEvernoteImportText(QString &content);
 void transformEvernoteImportText(QString &content, bool withCleanup = false);
 void cleanupEvernoteImportText(QString &content);
-QString testEvernoteImportText(const QString& data);
+QString testEvernoteImportText(const QString &data);
 void logToFileIfAllowed(QtMsgType msgType, const QString &msg);
 QString logMsgTypeText(QtMsgType logType);
 bool isSimilar(const QString &str1, const QString &str2, int threshold = 3);
 QString getBaseUrlFromUrlString(const QString &urlString, bool withBasePath = false);
 QString createAbsolutePathsInHtml(const QString &html, const QString &url);
+int getPreviewRefreshDebounceTime();
 }    // namespace Misc
 }    // namespace Utils
 

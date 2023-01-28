@@ -1,6 +1,6 @@
 # Parancssori interfész paraméterek
 
-Ezeket a paramétereket a parancssori felületen használhatja:
+Ezeket a paramétereket használhatja a parancssori felületen (CLI) az alkalmazás viselkedésének szabályozására:
 
 | Paraméter                    | Leírás                                                                                                                                   |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |

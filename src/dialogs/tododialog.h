@@ -18,9 +18,7 @@ class TodoDialog : public MasterDialog {
     Q_OBJECT
 
    public:
-    explicit TodoDialog(MainWindow *mainWindow,
-                        const QString &taskUid = QString(),
-                        QWidget *parent = nullptr);
+    explicit TodoDialog(const QString &taskUid = QString(), QWidget *parent = nullptr);
     ~TodoDialog();
 
     void reloadTodoListItems();
@@ -56,9 +54,8 @@ class TodoDialog : public MasterDialog {
     void on_todoItemTreeWidget_customContextMenuRequested(QPoint pos);
     void on_showDueTodayItemsOnlyCheckBox_clicked();
 
-private:
+   private:
     Ui::TodoDialog *ui;
-    MainWindow *_mainWindow;
     QSplitter *mainSplitter;
     CalendarItem currentCalendarItem;
     CalendarItem lastCreatedCalendarItem;

@@ -55,13 +55,13 @@ Iniciar un programa externo y esperar la salida
 ### Parámetros y llamada al método
 ```cpp
 /**
- * QML wrapper to start a synchronous process
- *
- * @param executablePath the path of the executable
- * @param parameters a list of parameter strings
- * @param data the data that will be written to the process (optional)
- * @param workingDirectory the working directory to execute the process in (optional)
- * @return the text that was returned by the process
+  * Envoltorio QML para iniciar un proceso síncrono
+  *
+  * @param executablePath la ruta del ejecutable
+  * @param parámetros una lista de cadenas de parámetros
+  * @param data los datos que se escribirán en el proceso (opcional)
+  * @param workingDirectory el directorio de trabajo para ejecutar el proceso (opcional)
+  * @return el texto que devolvió el proceso
 QByteArray startSynchronousProcess(QString executablePath, QStringList parameters, QByteArray data, QString workingDirectory);
 ```
 
@@ -98,9 +98,9 @@ Obtener la nota actual
 ### Parámetros y llamada al método
 ```cpp
 /**
- * QML wrapper to get the current note
- *
- * @returns {NoteApi} the current note object
+  * Envoltorio QML para obtener la nota actual
+  *
+  * @returns {NoteApi} el objeto de nota actual
  */
 NoteApi currentNote();
 ```
@@ -360,7 +360,7 @@ script.registerLabel("etiqueta larga", "otro texto muy largo, otro texto muy lar
 script.registerLabel("contra-etiqueta");
 ```
 
-Las etiquetas estarán visibles en el widget de la base de secuencias de comandos.
+The labels will be visible in the *Scripting panel*, which you need to enable in the *Window / Panels* menu.
 
 Puede utilizar texto sin formato o html en las etiquetas. Se podrá seleccionar el texto y se podrá hacer clic en los enlaces.
 
@@ -424,7 +424,7 @@ Accediendo al portapapeles
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Returns the content of the clipboard as text or html
+ * Devuelve el contenido del portapapeles como texto o html
  *
  * @param asHtml returns the clipboard content as html instead of text
  */
@@ -523,9 +523,9 @@ Seleccione la palabra actual en la edición de texto de la nota
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Selecciona la línea actual en la edición de texto de la nota
+ * Selecciona la palabra actual en la edición de texto de nota
  */
-void ScriptingService:: noteTextEditSelectCurrentWord();
+void ScriptingService::noteTextEditSelectCurrentWord();
 ```
 
 ### Ejemplo
@@ -771,7 +771,7 @@ Agregar una hoja de estilo personalizada
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Adds a custom stylesheet to the application
+ * Agrega una hoja de estilo personalizada a la aplicación.
  *
  * @param stylesheet
  */
@@ -919,17 +919,21 @@ Saltando a una nota
 ### Parámetros y llamada al método
 ```cpp
 /**
-  * Establece la nota actual si la nota está visible en la lista de notas
-  *
-  * @param note NoteApi nota para saltar
-  */
-void ScriptingService::setCurrentNote (NoteApi *nota);
+ * Sets the current note if the note is visible in the note list
+ *
+ * @param note NoteApi note to jump to
+ * @param asTab bool if true the note will be opened in a new tab (if not already open)
+ */
+void ScriptingService::setCurrentNote(NoteApi *note, bool asTab = false);
 ```
 
 ### Ejemplo
 ```js
-// saltar a la nota
+// jump to the note
 script.setCurrentNote(note);
+
+// open note in new tab (if not already open)
+script.setCurrentNote(note, true);
 ```
 
 Es posible que desee echar un vistazo al ejemplo [entrada-diario.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/journal-entry.qml).
@@ -1074,63 +1078,71 @@ Luego, el usuario puede establecer estas propiedades en la configuración del sc
 
 ### Ejemplo
 ```js
-// tienes que definir tus variables registradas para poder acceder a ellas más tarde
-propiedad cadena miCadena;
-propiedad bool miBooleano;
-propiedad cadena miTexto;
-propiedad int myInt;
-cadena de propiedad miArchivo;
-cadena de propiedad mySelection;
+// you have to define your registered variables so you can access them later
+property string myString;
+property bool myBoolean;
+property string myText;
+property int myInt;
+property string myFile;
+property string myDirectory;
+property string mySelection;
 
-// registre sus variables de configuración para que el usuario pueda establecerlas en la configuración del script
+// register your settings variables so the user can set them in the script settings
 //
-// desafortunadamente no hay QVariantHash en Qt, solo podemos usar
-// QVariantMap (que no tiene un orden arbitrario) o QVariantList (que en
-// menos se puede ordenar arbitrariamente)
-configuración de variante de propiedadVariables: [
+// unfortunately there is no QVariantHash in Qt, we only can use
+// QVariantMap (that has no arbitrary ordering) or QVariantList (which at
+// least can be ordered arbitrarily)
+property variant settingsVariables: [
     {
-        "identificador": "miCadena",
-        "name": "Soy una edición de línea",
-        "description": "Por favor ingrese una cadena válida:",
-        "tipo": "cadena",
-        "predeterminado": "Mi valor predeterminado",
+        "identifier": "myString",
+        "name": "I am a line edit",
+        "description": "Please enter a valid string:",
+        "type": "string",
+        "default": "My default value",
     },
     {
-        "identificador": "miBooleano",
-        "name": "Soy una casilla de verificación",
-        "description": "Alguna descripción",
-        "texto": "Marque esta casilla de verificación",
-        "tipo": "booleano",
-        "predeterminado": verdadero,
+        "identifier": "myBoolean",
+        "name": "I am a checkbox",
+        "description": "Some description",
+        "text": "Check this checkbox",
+        "type": "boolean",
+        "default": true,
     },
     {
-        "identificador": "miTexto",
-        "name": "Soy cuadro de texto",
-        "description": "Por favor ingrese su texto:",
-        "teclee el texto",
-        "default": "Este puede ser un texto muy largo\ncon varias líneas.",
+        "identifier": "myText",
+        "name": "I am textbox",
+        "description": "Please enter your text:",
+        "type": "text",
+        "default": "This can be a really long text\nwith multiple lines.",
     },
     {
-        "identificador": "miInt",
-        "name": "Soy selector de números",
-        "description": "Por favor ingrese un número:",
-        "tipo": "entero",
-        "predeterminado": 42,
+        "identifier": "myInt",
+        "name": "I am a number selector",
+        "description": "Please enter a number:",
+        "type": "integer",
+        "default": 42,
     },
     {
-        "identificador": "miArchivo",
-        "name": "Soy un selector de archivos",
-        "description": "Seleccione el archivo:",
-        "tipo": "archivo",
-        "predeterminado": "pandoc",
+        "identifier": "myFile",
+        "name": "I am a file selector",
+        "description": "Please select the file:",
+        "type": "file",
+        "default": "pandoc",
     },
     {
-        "identificador": "miSelección",
-        "name": "Soy un selector de elementos",
-        "description": "Seleccione un artículo:",
-        "tipo": "selección",
-        "predeterminado": "opción2",
-        "items": {"option1": "Texto para la opción 1", "option2": "Texto para la opción 2", "option3": "Texto para la opción 3"},
+        "identifier": "myDirectory",
+        "name": "I am a directory selector",
+        "description": "Please select the directory:",
+        "type": "directory",
+        "default": "/home",
+    },
+    {
+        "identifier": "mySelection",
+        "name": "I am an item selector",
+        "description": "Please select an item:",
+        "type": "selection",
+        "default": "option2",
+        "items": {"option1": "Text for option 1", "option2": "Text for option 2", "option3": "Text for option 3"},
     }
 ];
 ```
@@ -1260,7 +1272,7 @@ bool ScriptingService :: clearCacheDir (const QString & subDir) const;
 
 ### Ejemplo
 ```js
-// clear cache directory of my-script-id 
+// borrar el directorio de caché de my-script-id
 script.clearCacheDir("my-script-id");
 ```
 
@@ -1336,7 +1348,7 @@ Obtener el separador de directorios nativo
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Returns the native directory separator "/" or "\" on Windows
+ * Devuelve el separador de directorio nativo "/" o "\" en Windows
  *
  * @return
  */
@@ -1345,7 +1357,7 @@ QString ScriptingService::dirSeparator();
 
 ### Ejemplo
 ```js
-// will return "\" on Windows
+// devolverá "\" en Windows
 script.log(script.dirSeparator());
 ```
 
@@ -1355,7 +1367,7 @@ Obtener una lista de las rutas de todas las notas seleccionadas
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Returns a list of the paths of all selected notes
+ * Devuelve una lista de las rutas de todas las notas seleccionadas
  *
  * @return {QStringList} list of selected note paths
  */
@@ -1456,7 +1468,7 @@ Abrir un diálogo de entrada con una edición de línea
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Opens an input dialog with a line edit
+ * Abre un cuadro de diálogo de entrada con una edición de línea.
  *
  * @param title {QString} title of the dialog
  * @param label {QString} label text of the dialog
@@ -1470,7 +1482,7 @@ QString ScriptingService::inputDialogGetText(
 ### Ejemplo
 ```js
 var result = script.inputDialogGetText(
-    "line edit", "Please enter a name", "current text");
+    "line edit", "Por favor ingresa un nombre", "current text");
 script.log(result);
 ```
 
@@ -1480,7 +1492,7 @@ Comprobando si existe un archivo
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Check if a file exists
+ * Comprobar si existe un archivo
  * @param filePath
  * @return
  */
@@ -1499,7 +1511,7 @@ Leer texto de un archivo
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Read text from a file
+ * Leer texto de un archivo
  *
  * @param filePath {QString} path of the file to load
  * @param codec {QString} file encoding (default: UTF-8)
@@ -1523,7 +1535,7 @@ Escribir texto en un archivo
 ### Parámetros y llamada al método
 ```cpp
 /**
- * Writes a text to a file
+ * Escribe un texto en un archivo.
  *
  * @param filePath {QString}
  * @param data {QString}
@@ -1552,15 +1564,15 @@ También puede escuchar sockets con `WebSocket`. Por favor, mira el ejemplo [web
 
 Tenga en cuenta que debe tener instalada la biblioteca QML `websocket` de Qt para usar esto. Por ejemplo, en Ubuntu Linux puede instalar `módulo-qml-qtwebsockets`.
 
-Adding a highlighting rule for the editor
+Agregar una regla de resaltado para el editor
 -----------------------------------------
 
-You can directly inject highlighting rules into the editor by defining regular expressions and assigning them to a highlighting state.
+Puede inyectar directamente reglas de resaltado en el editor definiendo reglas regulares expresiones y asignarles un estado de resaltado.
 
-### Method call and parameters
+### Parámetros y llamada al método
 ```cpp
 /**
- * Adds a highlighting rule to the syntax highlighter of the editor
+ * Agrega una regla de resaltado al resaltador de sintaxis del editor
  *
  * @param pattern {QString} the regular expression pattern to highlight
  * @param shouldContain {QString} a string that must be contained in the highlighted text for the pattern to be parsed
@@ -1575,19 +1587,19 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
                                            int maskedGroup);
 ```
 
-### Highlighting states
+### Destacando estados
 
-| Name                       | Nr. |
+| Nombre                     | No. |
 | -------------------------- | --- |
 | NoState                    | -1  |
-| Link                       | 0   |
-| Image                      | 3   |
+| Enlace                     | 0   |
+| Imagen                     | 3   |
 | CodeBlock                  | 4   |
 | CodeBlockComment           | 5   |
-| Italic                     | 7   |
-| Bold                       | 8   |
-| List                       | 9   |
-| Comment                    | 11  |
+| Oblicua                    | 7   |
+| Negrita                    | 8   |
+| Liza                       | 9   |
+| Comentario                 | 11  |
 | H1                         | 12  |
 | H2                         | 13  |
 | H3                         | 14  |
@@ -1596,7 +1608,7 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
 | H6                         | 17  |
 | BlockQuote                 | 18  |
 | HorizontalRuler            | 21  |
-| Table                      | 22  |
+| Tabla                      | 22  |
 | InlineCodeBlock            | 23  |
 | MaskedSyntax               | 24  |
 | CurrentLineBackgroundColor | 25  |
@@ -1607,7 +1619,7 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
 | CheckBoxChecked            | 30  |
 | StUnderline                | 31  |
 
-### Example
+### Ejemplo
 ```js
 // Highlight a text line like "BLOCK: some text" as blockquote (state 18)
 script.addHighlightingRule("^BLOCK: (.+)", "BLOCK:", 18);
@@ -1618,4 +1630,4 @@ script.addHighlightingRule("^BLOCK: (.+)", "BLOCK:", 18);
 script.addHighlightingRule("^.{32}(.+)", "", 24, 1, -1);
 ```
 
-You can also take a look at the examples in [highlighting.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/highlighting.qml).
+También puede echar un vistazo a los ejemplos en [highlighting.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/highlighting.qml).

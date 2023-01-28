@@ -94,10 +94,29 @@ class TagApi {
     Q_PROPERTY(int id)
     Q_PROPERTY(QString name)
     Q_PROPERTY(int parentId)
+    Q_PROPERTY(QQmlListProperty<NoteApi> notes)
     Q_INVOKABLE TagApi fetchByName(const QString &name, int parentId = 0)
     Q_INVOKABLE QStringList getParentTagNames()
 };
 ```
+
+### Beispiel
+```js
+// Vergessen Sie nicht, "import QOwnNotesTypes 1.0" am Anfang Ihres Skripts zu verwenden!
+
+// Fetch tag "home"
+var tag = script.getTagByNameBreadcrumbList(["home"]);
+// Fetch all notes tagged with the tag
+var notes = tag.notes;
+
+// Iterate through notes of the tag
+for (var idx in notes) {
+    var note = notes[idx];
+    script.log(note.name);
+}
+```
+
+You'll find more examples where TagApi is used in [note-tagging-by-object.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/note-tagging-by-object.qml).
 
 HauptFenster
 ----------
@@ -125,34 +144,40 @@ class MainWindow {
     Q_INVOKABLE QString getWorkspaceUuid(const QString &workspaceName);
     // Sets the current workspace by UUID
     Q_INVOKABLE void setCurrentWorkspace(const QString &uuid);
+    // Closes a note tab on a specific index (returns true if successful)
+    Q_INVOKABLE bool removeNoteTab(int index);
+    // Returns a list of note ids that are opened in tabs
+    Q_INVOKABLE QList<int> getNoteTabNoteIdList();
+    // Jumps to a tag in the tag tree
+    Q_INVOKABLE bool jumpToTag(int tagId);
 };
 ```
 
 ### Beispiel
 ```js
-// Erzwingt ein Neuladen der Notizliste
+// Force a reload of the note list
 mainWindow.buildNotesIndexAndLoadNoteDirectoryList(true, true);
 
-// Erstellt einen neuen Notiz-Unterordner "Mein schicker Ordner" im aktuellen Unterordner
+// Creates a new note subfolder "My fancy folder" in the current subfolder
 mainWindow.createNewNoteSubFolder("My fancy folder");
 
-// Fügt HTML als Markdown in die aktuelle Notiz ein
+// Inserts html in the current note as markdown
 mainWindow.insertHtmlAsMarkdownIntoCurrentNote("<h2>my headline</h2>some text");
 
-// Legt Arbeitsbereich 'Bearbeiten' als aktuellen Arbeitsbereich fest
+// Set 'Edit' workspace as current workspace
 mainWindow.setCurrentWorkspace(mainWindow.getWorkspaceUuid("Edit"));
 
+// Jump to the tag "test" in the tag tree
+// There is an example in https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/custom-actions.qml
+var tag = script.getTagByNameBreadcrumbList(["test"]);
+mainWindow.jumpToTag(tag.id);
 
+// Get all notes that are opened in tabs
+var noteIds = mainWindow.getNoteTabNoteIdList();
+noteIds.forEach(function (noteId){
+    var note = script.fetchNoteById(noteId);
 
+    // do something with the note
+});
 
-mainWindow.buildNotesIndexAndLoadNoteDirectoryList(true, true);
-
-// Erstellt einen neuen Notiz-Unterordner "Mein schicker Ordner" im aktuellen Unterordner
-mainWindow.createNewNoteSubFolder("Mein ausgefallener Ordner");
-
-// Fügt HTML als Markdown in die aktuelle Notiz ein
-mainWindow.insertHtmlAsMarkdownIntoCurrentNote("<0>meine Überschrift</0>etwas Text");
-
-
-mainWindow.setCurrentWorkspace(mainWindow.getWorkspaceUuid("Bearbeiten"));
 ```

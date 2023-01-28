@@ -6,7 +6,9 @@ Si vous aimez QOwnNotes et que vous souhaitez **faire un don** au projet pour vo
 
 ## PayPal
 
-Vous pouvez **faire un don via PayPal** en cliquant sur ce bouton:
+Vous pouvez **faire un don via PayPal** à [pbek PayPal](https://paypal.me/pbek) :
+
+Pour programmer un don mensuel utilisez ce bouton (PayPal touche une commission sur le don) :
 
 <form id="paypal-donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
     <input type="hidden" name="cmd" value="_s-xclick">
@@ -16,21 +18,25 @@ Vous pouvez **faire un don via PayPal** en cliquant sur ce bouton:
     <img alt="" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
 </form>
 
+## GitHub Sponsors
+
+Vous pouvez nous **soutenir sur GitHub Sponsors** via [pbek GitHub Sponsors](https://github.com/sponsors/pbek).
+
 ## Liberapay
 
-Vous pouvez **faire un don via Liberapay** en cliquant sur ce bouton:
+Vous pouvez **faire un don via Liberapay** en cliquant sur ce bouton :
 
 <a href="https://liberapay.com/pbek/donate"><img alt="Faire un don avec Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
 ## Bitcoin
 
-Vous pouvez **faire un don Bitcoin BTC** à cette adresse Bitcoin BTC:
+Vous pouvez **faire un don Bitcoin BTC** à cette adresse Bitcoin BTC :
 
 ```
 395NiU7QKpNiayWgRrUEGZDn8Z1ebMx8CH
 ```
 
-Vous pouvez **faire un don Cash** à cette adresse Cash BTC:
+Vous pouvez **faire un don Bitcoin Cash** à cette adresse Bitcoin Cash :
 
 ```
 qpk3m6putywwad9sycz9hny5azs7dz67x5jrqmcelq
@@ -38,13 +44,13 @@ qpk3m6putywwad9sycz9hny5azs7dz67x5jrqmcelq
 
 ## Ethereum
 
-Vous pouvez **faire un don d'Etherium ETH** à cette adresse Etherium ETH:
+Vous pouvez **faire un don d'Ethereum ETH** à cette adresse Ethereum ETH :
 
 ```
 0x992aD2066640C5bF175c7c5649a41827dF6f87C9
 ```
 
-Vous pouvez **faire un don Ethereum ETC** à cette adresse ETC Ethereum:
+Vous pouvez **faire un don d'Ethereum ETC** à cette adresse Ethereum ETC :
 
 ```
 0xcC809a58637372EaC340E53767649cdc5C53cA0D

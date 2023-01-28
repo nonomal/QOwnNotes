@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,14 +28,13 @@ class QTabWidget;
 class QComboBox;
 class QPlainTextEdit;
 class QVBoxLayout;
+class QDockWidget;
 class Tag;
 
 /*  Gui functions that can be useful */
 
-#define INTERFACE_OVERRIDE_STYLESHEET_PRE_STRING \
-    "/* BEGIN INTERFACE OVERRIDE STYLESHEET */"
-#define INTERFACE_OVERRIDE_STYLESHEET_POST_STRING \
-    "/* END INTERFACE OVERRIDE STYLESHEET */"
+#define INTERFACE_OVERRIDE_STYLESHEET_PRE_STRING "/* BEGIN INTERFACE OVERRIDE STYLESHEET */"
+#define INTERFACE_OVERRIDE_STYLESHEET_POST_STRING "/* END INTERFACE OVERRIDE STYLESHEET */"
 
 namespace Utils {
 namespace Gui {
@@ -64,12 +63,11 @@ bool isOneTreeWidgetItemChildVisible(QTreeWidgetItem *item);
 void searchForTextInTreeWidget(QTreeWidget *treeWidget, const QString &text,
                                TreeWidgetSearchFlags searchFlags = None);
 void searchForTextInListWidget(QListWidget *listWidget, const QString &text,
-        bool searchAddProps = false);
+                               bool searchAddProps = false);
 
 QMessageBox::StandardButton showMessageBox(
-    QWidget *parent, QMessageBox::Icon icon, const QString &title,
-    const QString &text, const QString &identifier,
-    QMessageBox::StandardButtons buttons,
+    QWidget *parent, QMessageBox::Icon icon, const QString &title, const QString &text,
+    const QString &identifier, QMessageBox::StandardButtons buttons,
     QMessageBox::StandardButton defaultButton,
     QMessageBox::StandardButtons skipOverrideButtons = QMessageBox::NoButton);
 
@@ -82,8 +80,8 @@ QMessageBox::StandardButton information(
 QMessageBox::StandardButton question(
     QWidget *parent, const QString &title, const QString &text,
     const QString &identifier = QStringLiteral("default"),
-    QMessageBox::StandardButtons buttons =
-        QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No),
+    QMessageBox::StandardButtons buttons = QMessageBox::StandardButtons(QMessageBox::Yes |
+                                                                        QMessageBox::No),
     QMessageBox::StandardButton defaultButton = QMessageBox::NoButton,
     QMessageBox::StandardButtons skipOverrideButtons =
         QMessageBox::StandardButtons(QMessageBox::No));
@@ -91,36 +89,30 @@ QMessageBox::StandardButton question(
 QMessageBox::StandardButton questionNoSkipOverride(
     QWidget *parent, const QString &title, const QString &text,
     const QString &identifier = QStringLiteral("default"),
-    QMessageBox::StandardButtons buttons =
-        QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No),
+    QMessageBox::StandardButtons buttons = QMessageBox::StandardButtons(QMessageBox::Yes |
+                                                                        QMessageBox::No),
     QMessageBox::StandardButton defaultButton = QMessageBox::NoButton);
 
 QMessageBox::StandardButton warning(
     QWidget *parent, const QString &title, const QString &text,
     const QString &identifier = QStringLiteral("default"),
-    QMessageBox::StandardButtons buttons =
-        QMessageBox::StandardButtons(QMessageBox::Ok),
+    QMessageBox::StandardButtons buttons = QMessageBox::StandardButtons(QMessageBox::Ok),
     QMessageBox::StandardButton defaultButton = QMessageBox::Ok);
 
-bool userDataInTreeWidgetExists(QTreeWidget *treeWidget,
-                                const QVariant &userData, int column = 0);
+bool userDataInTreeWidgetExists(QTreeWidget *treeWidget, const QVariant &userData, int column = 0);
 
-QTreeWidgetItem *getTreeWidgetItemWithUserData(QTreeWidget *treeWidget,
-                                               const QVariant &userData,
+QTreeWidgetItem *getTreeWidgetItemWithUserData(QTreeWidget *treeWidget, const QVariant &userData,
                                                int column = 0);
 
-QListWidgetItem *getListWidgetItemWithUserData(QListWidget *listWidget,
-                                               const QVariant &userData);
+QListWidgetItem *getListWidgetItemWithUserData(QListWidget *listWidget, const QVariant &userData);
 
-void resetBoldStateOfAllTreeWidgetItems(QTreeWidget *treeWidget,
-                                        int column = 0);
+void resetBoldStateOfAllTreeWidgetItems(QTreeWidget *treeWidget, int column = 0);
 
 bool isMessageBoxPresent();
 
-QFont fontDialogGetFont(
-    bool *ok, const QFont &initial, QWidget *parent = nullptr,
-    const QString &title = QString(),
-    QFontDialog::FontDialogOptions options = QFontDialog::FontDialogOptions());
+QFont fontDialogGetFont(bool *ok, const QFont &initial, QWidget *parent = nullptr,
+                        const QString &title = QString(),
+                        QFontDialog::FontDialogOptions options = QFontDialog::FontDialogOptions());
 
 void copyCodeBlockText(const QTextBlock &initialBlock);
 
@@ -131,12 +123,10 @@ void updateInterfaceFontSize(int fontSize = -1);
 
 void setComboBoxIndexByUserData(QComboBox *comboBox, const QVariant &userData);
 
-int getTabWidgetIndexByProperty(QTabWidget *tabWidget,
-                                const QString &propertyName,
+int getTabWidgetIndexByProperty(QTabWidget *tabWidget, const QString &propertyName,
                                 const QVariant &propertyValue);
 int getTabWidgetNoteId(QTabWidget *tabWidget, int index);
-Note getTabWidgetNote(QTabWidget *tabWidget, int index,
-                      bool fetchByName = false);
+Note getTabWidgetNote(QTabWidget *tabWidget, int index, bool fetchByName = false);
 void storeNoteTabs(QTabWidget *tabWidget);
 void restoreNoteTabs(QTabWidget *tabWidget, QVBoxLayout *layout);
 void setTabWidgetTabSticky(QTabWidget *tabWidget, int index, bool sticky);
@@ -146,6 +136,7 @@ void reloadNoteTabs(QTabWidget *tabWidget);
 void setTreeWidgetItemToolTipForNote(QTreeWidgetItem *item, const Note &note,
                                      QDateTime *overrideFileLastModified = nullptr);
 bool doWindowsDarkModeCheck();
+bool doLinuxDarkModeCheck();
 
 QIcon folderIcon();
 QIcon noteIcon();
@@ -160,5 +151,6 @@ QIcon tagIcon();
  */
 void handleTreeWidgetItemTagColor(QTreeWidgetItem *item, const Tag &tag);
 void handleTreeWidgetItemTagColor(QTreeWidgetItem *item, int tag);
+bool enableDockWidgetQuestion(QDockWidget *dockWidget);
 }    // namespace Gui
 }    // namespace Utils

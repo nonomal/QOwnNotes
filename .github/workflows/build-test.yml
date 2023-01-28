@@ -6,7 +6,17 @@ on:
       - master
     tags-ignore:
       - '*'
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-including-paths
+    # if [[ ${changed_file} = src* ]] || [[ ${changed_file} = tests* ]] || [[ ${changed_file} = build-systems/github/* ]] || [[ ${changed_file} = ".github/workflows/build-test.yml" ]] ;
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'build-systems/github/**'
+      - '.github/workflows/build-test.yml'
   pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
   workflow_dispatch:
 #  schedule:
 #    - cron: "0 0 */3 * *"
@@ -22,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-2019]
         # Linux:   https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/
         # macOS:   https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/
         # Windows: https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/
@@ -33,16 +43,16 @@ jobs:
           - os: ubuntu-latest
             qt-version: '5.9.9'
           # tests.exe not found
-          - os: windows-latest
+          - os: windows-2019
             qt-version: '5.9.9'
           # Qt installation times out too often
-#          - os: windows-latest
+#          - os: windows-2019
 #            qt-version: '5.13.2'
           # win64_mingw73 not found
-#          - os: windows-latest
+#          - os: windows-2019
 #            qt-version: '5.15.0'
 #          # qt.conf not found (https://github.com/jurplel/install-qt-action/issues/54)
-#          - os: windows-latest
+#          - os: windows-2019
 #            qt-version: '5.15.1'
           # botan 32bit error
         include:
@@ -52,7 +62,7 @@ jobs:
 #          - os: macos-latest
 #            qt-version: '6.3.0'
 #            experimental: true
-#          - os: windows-latest
+#          - os: windows-2019
 #            qt-version: '6.3.0'
 #            experimental: true
           # Snapcraft
@@ -60,35 +70,10 @@ jobs:
             qt-version: '5.15.2'
             experimental: false
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: true
-    - id: files
-      uses: jitterbit/get-changed-files@v1
-      with:
-        format: 'csv'
-    - if: contains( matrix.os, 'macos')
-      name: Install bash 5.0 under macOS for mapfile
-      run: |
-        brew install bash
-        sudo mv /usr/local/bin/bash /bin/bash
-    - id: changes
-      name: Check if we want to build QOwnNotes
-      shell: bash
-      run: |
-        unset DO_BUILD
-        mapfile -d ',' -t added_modified_files < <(printf '%s,' '${{ steps.files.outputs.added_modified }}')
-        for changed_file in "${added_modified_files[@]}"; do
-          if [[ ${changed_file} = src* ]] || [[ ${changed_file} = tests* ]] || [[ ${changed_file} = build-systems/github/* ]] || [[ ${changed_file} = ".github/workflows/build-test.yml" ]] ;
-          then
-            echo "'${changed_file}' matches, we will build"
-            DO_BUILD='true'
-          fi
-        done
-        echo "DO_BUILD: ${DO_BUILD}"
-        echo ::set-output name=DO_BUILD::${DO_BUILD}
-
-    - if: contains( matrix.os, 'ubuntu-18') && steps.changes.outputs.DO_BUILD
+    - if: contains( matrix.os, 'ubuntu-18')
       name: Install Snapcraft
       uses: samuelmeuli/action-snapcraft@v1
       with:
@@ -98,77 +83,76 @@ jobs:
       # Install Qt
       #
 
-    - if: steps.changes.outputs.DO_BUILD
-      name: Cache Qt
+    - name: Cache Qt
       id: cache-qt
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ../Qt
-        key: ${{ matrix.os }}-QtCache-${{ matrix.qt-version }}
+        key: ${{ matrix.os }}-QtCache-${{ matrix.qt-version }}-2
     # https://github.com/jurplel/install-qt-action
-    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.9.9' ) && steps.changes.outputs.DO_BUILD
+    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.9.9' )
       name: Install Qt 5.9 on Windows
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{ matrix.qt-version }}
         arch: win32_mingw53
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        cache: ${{ steps.cache-qt.outputs.cache-hit }}
         aqtversion: '==0.9.4'
-    - if: contains( matrix.os, 'windows') && ( ( matrix.qt-version == '5.13.2' ) || ( matrix.qt-version == '5.14.2' ) ) && steps.changes.outputs.DO_BUILD
+    - if: contains( matrix.os, 'windows') && ( ( matrix.qt-version == '5.13.2' ) || ( matrix.qt-version == '5.14.2' ) )
       name: Install Qt on Windows
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{ matrix.qt-version }}
         arch: win64_mingw73
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
-    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' ) && steps.changes.outputs.DO_BUILD
+        cache: ${{ steps.cache-qt.outputs.cache-hit }}
+    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' )
       name: Install Qt 5.15.2 on Windows
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         aqtversion: '==2.0.0'
         version: ${{ matrix.qt-version }}
         arch: win64_mingw81
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
-    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '6.2.0' ) && steps.changes.outputs.DO_BUILD
+        cache: ${{ steps.cache-qt.outputs.cache-hit }}
+    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '6.2.0' )
       name: Install Qt 6.2.0 on Windows
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         aqtversion: '==2.0.0'
         version: ${{ matrix.qt-version }}
         arch: win64_mingw81
-        modules: qtwebsockets
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
-    - if: false == contains( matrix.os, 'windows') && ( matrix.qt-version != '6.2.0' ) && steps.changes.outputs.DO_BUILD
+        modules: qtwebsockets qt5compat
+        cache: ${{ steps.cache-qt.outputs.cache-hit }}
+    - if: false == contains( matrix.os, 'windows') && ( matrix.qt-version != '6.2.0' )
       name: Install Qt < 6 on Linux/macOS
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         aqtversion: '==2.0.0'
         version: ${{ matrix.qt-version }}
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
-    - if: false == contains( matrix.os, 'windows') && ( matrix.qt-version == '6.2.0' ) && steps.changes.outputs.DO_BUILD
+        cache: ${{ steps.cache-qt.outputs.cache-hit }}
+    - if: false == contains( matrix.os, 'windows') && ( matrix.qt-version == '6.2.0' )
       name: Install Qt 6.2.0 on Linux/macOS
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         aqtversion: '==2.0.0'
         version: ${{ matrix.qt-version }}
-        modules: qtwebsockets
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        modules: qtwebsockets qt5compat
+        cache: ${{ steps.cache-qt.outputs.cache-hit }}
 
       #
       # Do tests
       #
 
-    - if: contains( matrix.os, 'ubuntu-latest') && steps.changes.outputs.DO_BUILD
+    - if: contains( matrix.os, 'ubuntu-latest')
       name: Do Linux tests
       run: |
         cd ../tests && qmake CONFIG+=debug CONFIG+=DEV_MODE DEFINES+=INTEGRATION_TESTS && make -s -j 8
         ../bin/tests/tests -platform minimal -txt
-    - if: contains( matrix.os, 'macos') && steps.changes.outputs.DO_BUILD
+    - if: contains( matrix.os, 'macos')
       name: Do macOS tests
       run: |
         cd ../tests && qmake CONFIG+=debug CONFIG+=DEV_MODE DEFINES+=INTEGRATION_TESTS && make -s -j 8
         ../bin/tests/tests.app/Contents/MacOS/tests -platform minimal -txt
-    - if: contains( matrix.os, 'windows') && steps.changes.outputs.DO_BUILD
+    - if: contains( matrix.os, 'windows')
       name: Do Windows tests
       run: |
         cd ..\tests
@@ -177,22 +161,31 @@ jobs:
         copy ..\build-systems\github\windows\libcrypto-1_1-x64.dll .
         copy ..\build-systems\github\windows\libssl-1_1-x64.dll .
         copy ..\bin\tests\tests.exe .
-        windeployqt tests.exe
+        # echo set
+        # gci env:* | sort-object name
+        # echo path
+        # echo echo $env:PATH
+        # cd ..\bin\tests
+        # echo test1
+        # .\tests.exe -txt
+        # echo windeployqt 
+        windeployqt --debug tests.exe
+        # echo test2
         .\tests.exe -txt
 
       #
       # Build QOwnNotes
       #
 
-    - if: steps.changes.outputs.DO_BUILD && !(contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' )) && !contains( matrix.os, 'ubuntu-18')
+    - if: true && !(contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' )) && !contains( matrix.os, 'ubuntu-18')
       name: Build QOwnNotes
       run: |
         lrelease QOwnNotes.pro && qmake CONFIG+=debug CONFIG+=DEV_MODE && make -j 8
-    - if: steps.changes.outputs.DO_BUILD && contains( matrix.os, 'ubuntu-18')
+    - if: contains( matrix.os, 'ubuntu-18')
       name: Build QOwnNotes Ubuntu 18.04
       run: |
         lrelease QOwnNotes.pro && qmake CONFIG+=release && make -j 8
-    - if: contains( matrix.os, 'ubuntu-18') && steps.changes.outputs.DO_BUILD
+    - if: contains( matrix.os, 'ubuntu-18')
       name: Build for Snapcraft
       run: make clean && cd .. && sg lxd -c 'snapcraft --use-lxd' && ls
 
@@ -200,11 +193,11 @@ jobs:
       # Build QOwnNotes Windows Release and store it as artifact
       #
 
-    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' ) && steps.changes.outputs.DO_BUILD
+    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' )
       name: Build QOwnNotes Windows Release
       run: '& ..\build-systems\github\windows\build-zip.ps1'
-    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' ) && steps.changes.outputs.DO_BUILD
-      uses: actions/upload-artifact@v2
+    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' )
+      uses: actions/upload-artifact@v3
       with:
         name: QOwnNotes-Windows
         path: QOwnNotes.zip

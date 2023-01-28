@@ -1,5 +1,7 @@
 # Nach Notizen suchen
 
+Um nach Notizen oder Text in Notizen zu suchen, können Sie die Verknüpfung verwenden <kbd>Strg</kbd> + <kbd>⇧ Umschalt</kbd> + <kbd>F</kbd> (bzw <kbd>⌘ Cmd</kbd> + <kbd>⇧ Shift</kbd> + <kbd>F</kbd> unter macOS), um zum *Suchfeld für Notizen* zu springen.
+
 Es gibt verschiedene Möglichkeiten, nach Notizen zu suchen:
 
 - `Notizbuch` sucht nach Notizen mit dem Wort `Notiz` oder `Buch` im Dateinamen oder im Notiztext

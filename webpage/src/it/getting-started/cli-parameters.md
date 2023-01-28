@@ -1,6 +1,6 @@
 # Parametri dell'interfaccia della riga di comando
 
-Puoi usare questi parametri sull'interfaccia della riga di comando:
+È possibile utilizzare questi parametri sull'interfaccia della riga di comando (CLI) per controllare il comportamento dell'applicazione:
 
 | Parametro                    | Descrizione                                                                                                                                 |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |

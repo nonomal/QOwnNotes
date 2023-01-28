@@ -98,10 +98,10 @@ De huidige notitie ophalen
 ### Methodeaanroep en parameters
 ```cpp
 /**
- * QML wrapper to get the current note
- *
- * @returns {NoteApi} the current note object
- */
+  * QML-wrapper om de huidige notitie te krijgen
+  *
+  * @returns {NoteApi} het huidige notitieobject
+  */
 NoteApi currentNote();
 ```
 
@@ -360,7 +360,7 @@ script.registerLabel("long-label", "nog een zeer lange tekst, nog een zeer lange
 script.registerLabel("counter-label");
 ```
 
-De labels zijn zichtbaar in de scriptdock-widget.
+The labels will be visible in the *Scripting panel*, which you need to enable in the *Window / Panels* menu.
 
 U kunt zowel platte tekst als html in de labels gebruiken. De tekst kan worden geselecteerd en er kan op links worden geklikt.
 
@@ -523,9 +523,9 @@ Selecteer de huidige woord in de tekstbewerking van de notitie
 ### Methodeaanroep en parameters
 ```cpp
 /**
-  * Selecteert de huidige regel in de tekstbewerking van de notitie
+  * Selecteert het huidige woord in de notitietekstbewerking
   */
-void ScriptingService :: noteTextEditSelectCurrentWord ();
+void ScriptingService::noteTextEditSelectCurrentWord();
 ```
 
 ### Voorbeeld
@@ -921,17 +921,21 @@ Naar een notitie springen
 ### Methodeaanroep en parameters
 ```cpp
 /**
-  * Stelt de huidige notitie in als de notitie zichtbaar is in de notitielijst
-  *
-  * @param note Note Api-notitie om naar te springen
-  */
-void ScriptingService::setCurrentNote(NoteApi *note);
+ * Sets the current note if the note is visible in the note list
+ *
+ * @param note NoteApi note to jump to
+ * @param asTab bool if true the note will be opened in a new tab (if not already open)
+ */
+void ScriptingService::setCurrentNote(NoteApi *note, bool asTab = false);
 ```
 
 ### Voorbeeld
 ```js
-// spring naar de notitie
-script.setCurrentNote (opmerking);
+// jump to the note
+script.setCurrentNote(note);
+
+// open note in new tab (if not already open)
+script.setCurrentNote(note, true);
 ```
 
 You may want to take a look at the example [journal-entry.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/journal-entry.qml).
@@ -1082,6 +1086,7 @@ property bool myBoolean;
 property string myText;
 property int myInt;
 property string myFile;
+property string myDirectory;
 property string mySelection;
 
 // register your settings variables so the user can set them in the script settings
@@ -1125,6 +1130,13 @@ property variant settingsVariables: [
         "description": "Please select the file:",
         "type": "file",
         "default": "pandoc",
+    },
+    {
+        "identifier": "myDirectory",
+        "name": "I am a directory selector",
+        "description": "Please select the directory:",
+        "type": "directory",
+        "default": "/home",
     },
     {
         "identifier": "mySelection",
@@ -1554,42 +1566,42 @@ U kunt ook naar sockets luisteren met `WebSocket`. Kijk alstublieft naar de voor
 
 Onthoud dat u Qt's QML `websocket`-bibliotheek moet hebben geïnstalleerd om dit te gebruiken. U kunt bijvoorbeeld onder Ubuntu Linux installeren `qml-module-qtwebsockets`.
 
-Adding a highlighting rule for the editor
+Een markeringsregel toevoegen voor de editor
 -----------------------------------------
 
-You can directly inject highlighting rules into the editor by defining regular expressions and assigning them to a highlighting state.
+U kunt markeringsregels rechtstreeks in de editor invoegen door reguliere expressies te definiëren en deze toe te wijzen aan een markeringsstatus.
 
-### Method call and parameters
+### Methodeaanroep en parameters
 ```cpp
 /**
- * Adds a highlighting rule to the syntax highlighter of the editor
- *
- * @param pattern {QString} the regular expression pattern to highlight
- * @param shouldContain {QString} a string that must be contained in the highlighted text for the pattern to be parsed
- * @param state {int} the state of the syntax highlighter to use
- * @param capturingGroup {int} the capturing group for the pattern to use for highlighting (default: 0)
- * @param maskedGroup {int} the capturing group for the pattern to use for masking (default: 0)
- */
-void ScriptingService::addHighlightingRule(const QString &pattern,
-                                           const QString &shouldContain,
-                                           int state,
-                                           int capturingGroup,
-                                           int maskedGroup);
+  * Voegt een markeringsregel toe aan de syntaxismarkering van de editor
+  *
+  * @param patroon {QString} het reguliere expressiepatroon om te markeren
+  * @param shouldContain {QString} een tekenreeks die in de gemarkeerde tekst moet staan om het patroon te kunnen ontleden
+  * @param state {int} de staat van de te gebruiken syntax highlighter
+  * @param captureGroup {int} de capture-groep voor het patroon om te gebruiken voor markering (standaard: 0)
+  * @param maskedGroup {int} de vastleggroep voor het patroon om te gebruiken voor maskering (standaard: 0)
+  */
+void ScriptingService::addHighlightingRule(const QString &patroon,
+                                            const QString &shouldContain,
+                                            int staat,
+                                            int captureGroup,
+                                            int maskedGroup);
 ```
 
-### Highlighting states
+### Statussen markeren
 
-| Name                       | Nr. |
+| Naam                       | Nr. |
 | -------------------------- | --- |
 | NoState                    | -1  |
-| Link                       | 0   |
-| Image                      | 3   |
+| Koppeling                  | 0   |
+| Afbeelding                 | 3   |
 | CodeBlock                  | 4   |
 | CodeBlockComment           | 5   |
-| Italic                     | 7   |
-| Bold                       | 8   |
-| List                       | 9   |
-| Comment                    | 11  |
+| Cursief                    | 7   |
+| Vet                        | 8   |
+| Lijst                      | 9   |
+| Opmerking                  | 11  |
 | H1                         | 12  |
 | H2                         | 13  |
 | H3                         | 14  |
@@ -1609,15 +1621,15 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
 | CheckBoxChecked            | 30  |
 | StUnderline                | 31  |
 
-### Example
+### Voorbeeld
 ```js
-// Highlight a text line like "BLOCK: some text" as blockquote (state 18)
+// Markeer een tekstregel zoals "BLOCK: some text" als blockquote (status 18)
 script.addHighlightingRule("^BLOCK: (.+)", "BLOCK:", 18);
 
-// Mask out (state 24) all characters after 32 characters in a line
-// capturingGroup 1 means the expression from the first bracketed part of the pattern will be highlighted
-// maskedGroup -1 means that no masking should be done
+// Maskeer alle tekens na 32 tekens op een regel uit (status 24)
+// captureGroup 1 betekent dat de uitdrukking van het eerste deel van het patroon tussen haakjes wordt gemarkeerd
+// maskedGroup -1 betekent dat er niet gemaskeerd moet worden
 script.addHighlightingRule("^.{32}(.+)", "", 24, 1, -1);
 ```
 
-You can also take a look at the examples in [highlighting.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/highlighting.qml).
+U kunt de voorbeelden ook bekijken in [markeren.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/highlighting.qml).

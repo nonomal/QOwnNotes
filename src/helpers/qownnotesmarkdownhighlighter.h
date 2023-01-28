@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +40,7 @@ class QOwnNotesMarkdownHighlighter : public MarkdownHighlighter {
     void updateCurrentNote(Note *note);
 
     struct ScriptingHighlightingRule {
-        explicit ScriptingHighlightingRule(const HighlighterState state_)
-            : state(state_) {}
+        explicit ScriptingHighlightingRule(const HighlighterState state_) : state(state_) {}
         ScriptingHighlightingRule() = default;
 
         QRegularExpression pattern;
@@ -61,7 +60,7 @@ class QOwnNotesMarkdownHighlighter : public MarkdownHighlighter {
     void setMisspelled(const int start, const int count);
     void highlightSpellChecking(const QString &text);
 
-    void updateCachedRegexes(const QString& newExt);
+    void updateCachedRegexes(const QString &newExt);
 
    private:
     Note *_currentNote = nullptr;

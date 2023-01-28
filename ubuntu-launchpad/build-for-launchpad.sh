@@ -4,19 +4,19 @@
 # https://launchpad.net/~pbek/+archive/ubuntu/qownnotes
 #
 # We will need some packages to execute this locally:
-# sudo apt-get install build-essential autoconf automake autotools-dev dh-make debhelper devscripts fakeroot xutils lintian pbuilder cdbs
+# sudo apt-get install build-essential autoconf automake autotools-dev dh-make debhelper devscripts fakeroot xutils lintian pbuilder cdbs gnupg
 #
 # Also a ~/.dput.cf has to be in place
 #
 
 # uncomment this if you want to force a version
-#QOWNNOTES_VERSION=22.1.11.1
+#QOWNNOTES_VERSION=22.11.3.1
 
 BRANCH=develop
 #BRANCH=master
 
 # https://wiki.ubuntu.com/Releases
-UBUNTU_RELEASES=( "bionic" "focal" "impish" "jammy" "kinetic" )
+UBUNTU_RELEASES=( "jammy" "bionic" "focal" "kinetic" "lunar" )
 
 
 DATE=$(LC_ALL=C date +'%a, %d %b %Y %T %z')

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,7 @@ class LogWidget : public QFrame {
 
     explicit LogWidget(QWidget *parent = 0);
     ~LogWidget();
-    static void logMessageOutput(QtMsgType type,
-                                 const QMessageLogContext &context,
+    static void logMessageOutput(QtMsgType type, const QMessageLogContext &context,
                                  const QString &msg);
     bool eventFilter(QObject *obj, QEvent *event) override;
     QString getLogText() const;

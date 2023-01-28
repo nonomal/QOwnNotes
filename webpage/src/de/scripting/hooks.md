@@ -202,22 +202,22 @@ preNoteToMarkdownHtmlHook
 
 
 ```js
-/ **
+/**
   * Diese Funktion wird aufgerufen, bevor das Markdown-HTML einer Notiz generiert wird
-  * *
-  * Hier können Sie ändern, was an den Markdown-to-HTML-Konverter übergeben wird
-  * *
-  * Die Methode kann beispielsweise in mehreren Skripten zum Rendern von Code verwendet werden (wie LaTeX-Mathematik oder Meerjungfrau).
+  *
+  * Sie können ändern, was an den Markdown-zu-HTML-Konverter übergeben wird
+  *
+  * Die Funktion kann zum Beispiel in mehreren Skripten verwendet werden, um Code zu rendern (wie LaTeX math oder meermaid)
   * zu seiner grafischen Darstellung für die Vorschau
-  * *
-  * Der Hinweis wird dabei nicht geändert
-  * *
+  *
+  * Die Notiz wird dabei nicht verändert
+  *
   * @param {NoteApi} note - das Notizobjekt
-  * @param {string} markdown - der Markdown, der in HTML konvertiert werden soll
-  * @param {string} forExport - true, wenn der HTML-Code für einen Export verwendet wird, false für die Vorschau
-  * @return {string} der geänderte Markdown oder eine leere Zeichenfolge, wenn nichts geändert werden soll
- */
-function preNoteToMarkdownHtmlHook(note, markdown, forExport);
+  * @param {string} Markdown - der Markdown, der gerade in HTML konvertiert wird
+  * @param {bool} forExport - true, wenn das HTML für einen Export verwendet wird, false für die Vorschau
+  * @return {string} der geänderte Markdown oder ein leerer String, wenn nichts geändert werden soll
+  */
+Funktion preNoteToMarkdownHtmlHook(note, markdown, forExport);
 ```
 
 
@@ -246,7 +246,7 @@ noteToMarkdownHtmlHook
   *
   * @param {NoteApi} note - das Notizobjekt
   * @param {string} html - das HTML, das gerendert werden soll
-  * @param {string} forExport - true, wenn das HTML für einen Export verwendet wird, false für die Vorschau
+  * @param {bool} forExport - true, wenn das HTML für einen Export verwendet wird, false für die Vorschau
   * @return {string} der geänderte HTML-Code oder ein leerer String, wenn nichts geändert werden soll
   */
 Funktion noteToMarkdownHtmlHook(note, html, forExport);
@@ -495,3 +495,30 @@ Funktion windowStateChangedHook (windowState);
 
 
 Vielleicht möchten Sie sich das Beispiel ansehen [window-state-changed.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/window-state-changed.qml).
+
+
+
+
+
+workspaceSwitchedHook
+----------------------
+
+Dieser Hook wird aufgerufen, wenn Workspaces gewechselt werden.
+
+
+
+### Methodenaufruf und Parameter
+
+
+```js
+/**
+ * Diese Funktion wird aufgerufen, wenn Workspaces umgeschaltet werden
+ *
+ * @param oldUuid old uuid of workspace
+ * @param newUuid new uuid of workspace
+ */
+function workspaceSwitchedHook(oldUuid, newUuid);
+```
+
+
+Vielleicht möchten Sie sich das Beispiel ansehen [websocket-raw-data-new-note.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/workspaces.qml).

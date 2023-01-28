@@ -98,10 +98,10 @@ Az aktuális jegyzet megszerzése
 ### Módszerhívás és paraméterek
 ```cpp
 /**
- * QML wrapper to get the current note
- *
- * @returns {NoteApi} the current note object
- */
+  * QML-burkoló az aktuális jegyzet lekéréséhez
+  *
+  * @visszaadja a {NoteApi} aktuális jegyzetobjektumot
+  */
 NoteApi currentNote();
 ```
 
@@ -359,7 +359,7 @@ script.registerLabel ("long-label", "egy másik nagyon hosszú, egy másik nagyo
 script.registerLabel ("ellencímke");
 ```
 
-A címkék láthatók lesznek a szkriptek dokkoló moduljában.
+The labels will be visible in the *Scripting panel*, which you need to enable in the *Window / Panels* menu.
 
 A címkékben használhat sima szöveget vagy HTML-t is. A szöveg választható lesz, és a linkekre kattintani lehet.
 
@@ -522,9 +522,9 @@ Válassza ki az aktuális szót a jegyzet szövegszerkesztésében
 ### Módszerhívás és paraméterek
 ```cpp
 /**
-  * Kiválasztja az aktuális sort a jegyzet szövegszerkesztésében
+  * Kijelöli az aktuális szót a jegyzet szövegének szerkesztésében
   */
-void ScriptingService :: noteTextEditSelectCurrentWord();
+void ScriptingService::noteTextEditSelectCurrentWord();
 ```
 
 ### Példa
@@ -920,17 +920,21 @@ Ugrás egy jegyzethez
 ### Módszerhívás és paraméterek
 ```cpp
 /**
-  * Beállítja az aktuális jegyzetet, ha a jegyzet látható a jegyzetlistában
-  *
-  * @param note NoteApi jegyzet, ahova ugorhat
-  */
-void ScriptingService::setCurrentNote(NoteApi *note);
+ * Sets the current note if the note is visible in the note list
+ *
+ * @param note NoteApi note to jump to
+ * @param asTab bool if true the note will be opened in a new tab (if not already open)
+ */
+void ScriptingService::setCurrentNote(NoteApi *note, bool asTab = false);
 ```
 
 ### Példa
 ```js
-// ugrás a hangra
+// jump to the note
 script.setCurrentNote(note);
+
+// open note in new tab (if not already open)
+script.setCurrentNote(note, true);
 ```
 
 Érdemes megnézni a példát [journal-entry.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/journal-entry.qml).
@@ -1074,60 +1078,68 @@ Ezután a felhasználó beállíthatja ezeket a tulajdonságokat a szkript beál
 
 ### Példa
 ```js
-// meg kell határoznia a regisztrált változókat, hogy később hozzáférhessen hozzájuk
+// you have to define your registered variables so you can access them later
 property string myString;
 property bool myBoolean;
 property string myText;
 property int myInt;
 property string myFile;
+property string myDirectory;
 property string mySelection;
 
-// regisztrálja a beállítási változóit, hogy a felhasználó beállíthassa azokat a szkriptbeállításokban
+// register your settings variables so the user can set them in the script settings
 //
-// Sajnos a Qt-ban nincs QVariantHash, csak használhatjuk
-// QVariantMap (amelynek nincs tetszőleges sorrendje) vagy QVariantList (amely 
-// legalább tetszőlegesen megrendelhető)
+// unfortunately there is no QVariantHash in Qt, we only can use
+// QVariantMap (that has no arbitrary ordering) or QVariantList (which at
+// least can be ordered arbitrarily)
 property variant settingsVariables: [
     {
         "identifier": "myString",
-        "name": "Sorszerkesztő vagyok",
-        "description": "Adjon meg egy érvényes karakterláncot:",
+        "name": "I am a line edit",
+        "description": "Please enter a valid string:",
         "type": "string",
         "default": "My default value",
     },
     {
         "identifier": "myBoolean",
-        "name": "Jelölőnégyzet vagyok",
-        "description": "Egy kis leírás",
-        "text": "Jelölje be ezt a jelölőnégyzetet",
+        "name": "I am a checkbox",
+        "description": "Some description",
+        "text": "Check this checkbox",
         "type": "boolean",
         "default": true,
     },
     {
         "identifier": "myText",
-        "name": "Szövegdoboz vagyok",
-        "description": "Kérjük, írja be a szövegét:",
+        "name": "I am textbox",
+        "description": "Please enter your text:",
         "type": "text",
-        "default": "Ez nagyon hosszú szöveg lehet,\többsoros.",
+        "default": "This can be a really long text\nwith multiple lines.",
     },
     {
         "identifier": "myInt",
-        "name": "Számválasztó vagyok",
-        "description": "Kérjük, írjon be egy számot:",
+        "name": "I am a number selector",
+        "description": "Please enter a number:",
         "type": "integer",
         "default": 42,
     },
     {
         "identifier": "myFile",
-        "name": "Fájlválasztó vagyok",
-        "description": "Kérjük, válassza ki a fájlt:",
+        "name": "I am a file selector",
+        "description": "Please select the file:",
         "type": "file",
         "default": "pandoc",
     },
     {
+        "identifier": "myDirectory",
+        "name": "I am a directory selector",
+        "description": "Please select the directory:",
+        "type": "directory",
+        "default": "/home",
+    },
+    {
         "identifier": "mySelection",
-        "name": "Tételválasztó vagyok",
-        "description": "Kérjük, válasszon egy tételt:",
+        "name": "I am an item selector",
+        "description": "Please select an item:",
         "type": "selection",
         "default": "option2",
         "items": {"option1": "Text for option 1", "option2": "Text for option 2", "option3": "Text for option 3"},
@@ -1552,42 +1564,42 @@ A foglalatokat a `WebSocket` használatával is meghallgathatja. Kérjük, nézz
 
 Ne feledje, hogy ennek használatához telepítenie kell a Qt QML `websocket` könyvtárát. Például az Ubuntu Linux alatt telepíthet `qml-module-qtwebsockets`.
 
-Adding a highlighting rule for the editor
+Kiemelési szabály hozzáadása a szerkesztőhöz
 -----------------------------------------
 
-You can directly inject highlighting rules into the editor by defining regular expressions and assigning them to a highlighting state.
+A kiemelési szabályokat közvetlenül beillesztheti a szerkesztőbe úgy, hogy reguláris kifejezéseket definiál és kiemelési állapothoz rendel.
 
-### Method call and parameters
+### Módszerhívás és paraméterek
 ```cpp
 /**
- * Adds a highlighting rule to the syntax highlighter of the editor
- *
- * @param pattern {QString} the regular expression pattern to highlight
- * @param shouldContain {QString} a string that must be contained in the highlighted text for the pattern to be parsed
- * @param state {int} the state of the syntax highlighter to use
- * @param capturingGroup {int} the capturing group for the pattern to use for highlighting (default: 0)
- * @param maskedGroup {int} the capturing group for the pattern to use for masking (default: 0)
- */
-void ScriptingService::addHighlightingRule(const QString &pattern,
-                                           const QString &shouldContain,
-                                           int state,
-                                           int capturingGroup,
-                                           int maskedGroup);
+  * Kiemelési szabályt ad a szerkesztő szintaxiskiemelőjéhez
+  *
+  * @param minta {QString} a kiemelendő reguláris kifejezés mintája
+  * @param shouldContain {QString} egy karakterlánc, amelynek szerepelnie kell a kiemelt szövegben a minta elemzéséhez
+  * @param állapot {int} a használni kívánt szintaxiskiemelő állapota
+  * @param capturingGroup {int} a kiemeléshez használandó minta rögzítési csoportja (alapértelmezett: 0)
+  * @param maskedGroup {int} a maszkoláshoz használandó minta rögzítési csoportja (alapértelmezett: 0)
+  */
+void ScriptingService::addHighlightingRule(const QString &minta,
+                                            const QString &tartalmaznia kell,
+                                            ink állapotban,
+                                            int capturingGroup,
+                                            int maskedGroup);
 ```
 
-### Highlighting states
+### Az állapotok kiemelése
 
-| Name                       | Nr. |
+| Név                        | Nr. |
 | -------------------------- | --- |
 | NoState                    | -1  |
 | Link                       | 0   |
 | Image                      | 3   |
 | CodeBlock                  | 4   |
 | CodeBlockComment           | 5   |
-| Italic                     | 7   |
-| Bold                       | 8   |
-| List                       | 9   |
-| Comment                    | 11  |
+| Dőlt                       | 7   |
+| Félkövér                   | 8   |
+| Lista                      | 9   |
+| Hozzászólás                | 11  |
 | H1                         | 12  |
 | H2                         | 13  |
 | H3                         | 14  |
@@ -1596,7 +1608,7 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
 | H6                         | 17  |
 | BlockQuote                 | 18  |
 | HorizontalRuler            | 21  |
-| Table                      | 22  |
+| Táblázat                   | 22  |
 | InlineCodeBlock            | 23  |
 | MaskedSyntax               | 24  |
 | CurrentLineBackgroundColor | 25  |
@@ -1607,15 +1619,15 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
 | CheckBoxChecked            | 30  |
 | StUnderline                | 31  |
 
-### Example
+### Példa
 ```js
-// Highlight a text line like "BLOCK: some text" as blockquote (state 18)
+// Jelöljön ki egy szövegsort, mint például a „BLOCK: some text”, mint idézőjel (18-as állapot)
 script.addHighlightingRule("^BLOCK: (.+)", "BLOCK:", 18);
 
-// Mask out (state 24) all characters after 32 characters in a line
-// capturingGroup 1 means the expression from the first bracketed part of the pattern will be highlighted
-// maskedGroup -1 means that no masking should be done
+// Minden karakter maszkolása (24-es állapot) 32 karakter után egy sorban
+// CapturingGroup 1 azt jelenti, hogy a minta első zárójeles részének kifejezése kiemelve lesz
+// A maskedGroup -1 azt jelenti, hogy nem szabad maszkolni
 script.addHighlightingRule("^.{32}(.+)", "", 24, 1, -1);
 ```
 
-You can also take a look at the examples in [highlighting.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/highlighting.qml).
+Megnézheti a példákat is [kiemelés.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/highlighting.qml).

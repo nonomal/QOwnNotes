@@ -67,9 +67,13 @@ Vous pouvez utiliser des **listes non-ordonnées avec des blocs de code en ligne
 Si vous ajoutez un `cmd:` avant le bloc de code en ligne, la commande sera aussi trouvée dans la **note courante** quelles que soient les étiquettes de cette dernière.
 
 ```markdown
-- `echo Je suis une commande` Je suis une description #étiquette1 #étiquette2 #étiquette3
-* `echo Je suis aussi une commande` Je suis une description #étiquette3 #étiquette4 #étiquette5
-- cmd: `echo Je serai trouvée dans la note courante` Cette commande sera trouvée dans la note courante quelles que soient ses étiquettes
+- `echo Je suis une commande` Je suis une description #tag1 #tag2 #tag3
+* `echo Je suis également une commande` Je suis une description #tag3 #tag4 #tag5
+- cmd: `echo Je serai présente dans la note courante` Cette commande se retrouvera dans la note courante quelles que soient ses étiquettesT
+
+<!-- Example de demande d'une entrée utilisateur -->
+
+- `read -p "PR ID: " id && git fetch origin pull/$id/head:pull-$id && git checkout pull-$id` Récupérer l'ID de la pull request et la valider
 ```
 
 Des **blocs de code `bash` ou `shell`** précédés par un en-tête niveau 2 ou plus élevé peuvent également être utilisés pour des extraits de commandes. Les étiquettes sont également prises en charge si elles sont placées entre un en-tête et un bloc de code.

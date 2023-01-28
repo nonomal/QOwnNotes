@@ -94,10 +94,29 @@ class TagApi {
     Q_PROPERTY(int id)
     Q_PROPERTY(QString name)
     Q_PROPERTY(int parentId)
+    Q_PROPERTY(QQmlListProperty<NoteApi> notes)
     Q_INVOKABLE TagApi fetchByName(const QString &name, int parentId = 0)
     Q_INVOKABLE QStringList getParentTagNames()
 };
 ```
+
+### مثال
+```js
+// لا تنس أن تبدأ بُريمجك بالعبارة "import QOwnNotesTypes 1.0"!
+
+// أحضر الوسم "home"
+var tag = script.getTagByNameBreadcrumbList(["home"]);
+// أحضر جميع الملاحظات الموسومة بهذا الوسم
+var notes = tag.notes;
+
+// كرر كودًا على جميع الملاحظات ذات الوسم المحدد
+for (var idx in notes) {
+    var note = notes[idx];
+    script.log(note.name);
+}
+```
+
+يمكنك أن تجد أمثلة أكثر على استخدام TagApi في [note-tagging-by-object.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/note-tagging-by-object.qml).
 
 MainWindow (النافذة الرئيسية)
 ----------
@@ -110,36 +129,57 @@ class MainWindow {
     Q_INVOKABLE void buildNotesIndexAndLoadNoteDirectoryList(
             bool forceBuild = false, bool forceLoad = false);
     Q_INVOKABLE void focusNoteTextEdit();
-    // يُنشئ مجلد فرعي جديد للملاحظة في المجلد الفرعي الحالي
+    // تنشئ مجلد ملاحظة فرعي جديد في المجلد الفرعي الحالي
     Q_INVOKABLE bool createNewNoteSubFolder(QString folderName = "");
-    // يضيف هتمل بصيغة ماركداون في الملاحظة الحالية
-    // هذه الدالة أيضا تقوم بتنزيل الصور البعيدة وتحويل الروابط من النوع
-    // "data:image"
+    // تضيف هتمل إلى الملاحظة الحالية بصيغة ماركداون
+    // وتنزّل أيضا الصور البعيدة وتحوّل روابط البيانات
+    // ("data:image")
     // إلى صور محلية مخزنة في مجلد الوسائط
     Q_INVOKABLE void insertHtmlAsMarkdownIntoCurrentNote(QString html);
-    // يُعيد تحميل الملاحظة الحالية بمُعرِّفها
-    // هذا مفيد عندما يتغير مسار أو اسم ملف الملاحظة الحالية
+    // تعيد تحميل الملاحظة الحالية، بدلالة معرّفها
+    // تفيد هذه الدالة عندما يتغير مسار الملاحظة الحالية أو اسم ملفها
     Q_INVOKABLE void reloadCurrentNoteByNoteId();
-    // يُعيد قائمة بالمُعرِّفات العالمية الفريدة لمساحات العمل (UUID)
+    // ترجع قائمة بالمعرّفات العالمية الفريدة لمساحات العمل (UUIDs)
     Q_INVOKABLE QStringList getWorkspaceUuidList();
-    // يُعطى اسم مساحة عمل ويُعيد مُعرِّفها العالمي الفريد (UUID)
+    // ترجع المعرّف العالمي الفريد لمساحة عمل، بدلالة اسمها
     Q_INVOKABLE QString getWorkspaceUuid(const QString &workspaceName);
-    // يجعل مساحة العمل الحالية هي المساحة ذات المُعرِّف العالمي الفريد المُعطى (UUID)
+    // تضبط مساحة العمل الحالية، بدلالة معرّفها العالمي الفريد
     Q_INVOKABLE void setCurrentWorkspace(const QString &uuid);
+    // تغلق تبويب ملاحظة، بدلالة دليله، وعند النجاح ترجع القيمة المنطقية الصادقة (true)
+    Q_INVOKABLE bool removeNoteTab(int index);
+    // ترجع قائمة بمعرِّفات الملاحظات المفتوحة في تبويبات
+    Q_INVOKABLE QList<int> getNoteTabNoteIdList();
+    // تنتقل إلى وسم في شجرة الوسوم
+    Q_INVOKABLE bool jumpToTag(int tagId);
 };
 ```
 
 ### مثال
 ```js
-// إعادة تحميل قائمة الملاحظات بالقوة
+// أعد تحميل قائمة الملاحظات بالقوة
 mainWindow.buildNotesIndexAndLoadNoteDirectoryList(true, true);
 
-// إنشاء مجلد فرعي جديد لملاحظة باسم «مجلدي الفخيم» في المجلد الفرعي الحالي
+// أنشى مجلد ملاحظات فرعي جديد باسم «مجلدي الفخيم» في المجلد الفرعي الحالي
 mainWindow.createNewNoteSubFolder("مجلدي الفخيم");
 
-// إضافة هتمل إلى الملاحظة الحالية بصيغة ماركداون
+// أضف هتمل في الملاحظة الحالية بصيغة ماركداون
 mainWindow.insertHtmlAsMarkdownIntoCurrentNote("<h2>عنوان</h2>بعض النص");
 
-// جعل مساحة العمل «تحرير» هي المساحة الحالية
+// اجعل مساحة العمل التي اسمها «تحرير» هي مساحة العمل الحالية
 mainWindow.setCurrentWorkspace(mainWindow.getWorkspaceUuid("تحرير"));
+
+// انتقل إلى الوسم «تجربة» في قائمة الوسوم
+// يوجد مثال في
+// https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/custom-actions.qml
+var tag = script.getTagByNameBreadcrumbList(["تجربة"]);
+mainWindow.jumpToTag(tag.id);
+
+// اجلب جميع الملاحظات المفتوحة في تبويبات
+var noteIds = mainWindow.getNoteTabNoteIdList();
+noteIds.forEach(function (noteId){
+    var note = script.fetchNoteById(noteId);
+
+    // افعل شيئا بالملاحظة
+});
+
 ```

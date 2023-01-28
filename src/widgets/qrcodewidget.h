@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,14 +19,13 @@ class QRCodeWidget : public QWidget {
     Q_OBJECT
 
    public:
-    explicit QRCodeWidget(QWidget *parent = nullptr,
-                   Qt::WindowFlags f = Qt::WindowFlags());
+    explicit QRCodeWidget(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     void setText(const QString &text);
 
    protected:
     void paintEvent(QPaintEvent *event) override;
-    static void paintQR(QPainter &painter, QSize sz, const QString &data,
-                        const QColor& fg, const QColor& bg);
+    static void paintQR(QPainter &painter, QSize sz, const QString &data, const QColor &fg,
+                        const QColor &bg);
 
    private:
     QString _text;

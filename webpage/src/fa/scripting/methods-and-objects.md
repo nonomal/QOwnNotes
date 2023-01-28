@@ -360,7 +360,7 @@ script.registerLabel("long-label", "another very long text, another very long te
 script.registerLabel("counter-label");
 ```
 
-برچسب ها در ابزارک لنگرگاه اسکریپت نویسی قابل رؤیت هستند.
+The labels will be visible in the *Scripting panel*, which you need to enable in the *Window / Panels* menu.
 
 شما می توانید هم از متن ساده و هم html در برچسب ها استفاده کنید. متن قابل انتخاب بوده و می توان روی پیوندها کلیک کرد.
 
@@ -523,7 +523,7 @@ script.noteTextEditSelectCurrentLine();
 ### فراخوانی شگرد و پارامترها
 ```cpp
 /**
- * Selects the current line in the note text edit
+ * Selects the current word in the note text edit
  */
 void ScriptingService::noteTextEditSelectCurrentWord();
 ```
@@ -923,14 +923,18 @@ script.setClipboardText("text to copy");
  * Sets the current note if the note is visible in the note list
  *
  * @param note NoteApi note to jump to
+ * @param asTab bool if true the note will be opened in a new tab (if not already open)
  */
-void ScriptingService::setCurrentNote(NoteApi *note);
+void ScriptingService::setCurrentNote(NoteApi *note, bool asTab = false);
 ```
 
 ### مثال
 ```js
 // jump to the note
 script.setCurrentNote(note);
+
+// open note in new tab (if not already open)
+script.setCurrentNote(note, true);
 ```
 
 شاید بخواهید به مثال [journal-entry.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/journal-entry.qml) نگاهی بیندازید.
@@ -1081,6 +1085,7 @@ property bool myBoolean;
 property string myText;
 property int myInt;
 property string myFile;
+property string myDirectory;
 property string mySelection;
 
 // register your settings variables so the user can set them in the script settings
@@ -1124,6 +1129,13 @@ property variant settingsVariables: [
         "description": "Please select the file:",
         "type": "file",
         "default": "pandoc",
+    },
+    {
+        "identifier": "myDirectory",
+        "name": "I am a directory selector",
+        "description": "Please select the directory:",
+        "type": "directory",
+        "default": "/home",
     },
     {
         "identifier": "mySelection",
@@ -1259,7 +1271,7 @@ You can clear the cache directory of your script by passing its name to clearCac
 bool ScriptingService::clearCacheDir(const QString &subDir) const;
 ```
 
-### Example
+### مثال
 ```js
 // clear cache directory of my-script-id 
 script.clearCacheDir("my-script-id");
@@ -1578,35 +1590,35 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
 
 ### حالات برجسته سازی
 
-| نام                        | شماره |
-| -------------------------- | ----- |
-| NoState                    | -1    |
-| Link                       | 0     |
-| Image                      | 3     |
-| CodeBlock                  | 4     |
-| CodeBlockComment           | 5     |
-| Italic                     | 7     |
-| Bold                       | 8     |
-| List                       | 9     |
-| Comment                    | 11    |
-| H1                         | 12    |
-| H2                         | 13    |
-| H3                         | 14    |
-| H4                         | 15    |
-| H5                         | 16    |
-| H6                         | 17    |
-| BlockQuote                 | 18    |
-| HorizontalRuler            | 21    |
-| Table                      | 22    |
-| InlineCodeBlock            | 23    |
-| MaskedSyntax               | 24    |
-| CurrentLineBackgroundColor | 25    |
-| BrokenLink                 | 26    |
-| FrontmatterBlock           | 27    |
-| TrailingSpace              | 28    |
-| CheckBoxUnChecked          | 29    |
-| CheckBoxChecked            | 30    |
-| StUnderline                | 31    |
+| نام                    | شماره |
+| ---------------------- | ----- |
+| NoState                | -1    |
+| اتصال                  | 0     |
+| تصویر                  | 3     |
+| کد بلوک                | 4     |
+| توضیحات کد بلوک        | 5     |
+| خوابیده                | 7     |
+| توپر                   | 8     |
+| لیست                   | 9     |
+| توضیحات                | 11    |
+| H1                     | 12    |
+| H2                     | 13    |
+| H3                     | 14    |
+| H4                     | 15    |
+| H5                     | 16    |
+| H6                     | 17    |
+| بلوک نقل قول           | 18    |
+| خط کش افقی             | 21    |
+| جدول                   | 22    |
+| کد بلوک درون خطی       | 23    |
+| چیدمان پوشیده          | 24    |
+| رنگ پس زمینه خط کنونی  | 25    |
+| لینک شکسته             | 26    |
+| بلوک پیش گفتار         | 27    |
+| فضای خالی              | 28    |
+| کادر انتخاب بدون علامت | 29    |
+| کادر انتخاب با علامت   | 30    |
+| StUnderline            | 31    |
 
 ### مثال
 ```js

@@ -14,13 +14,15 @@ defaults:
 
 jobs:
   create_release:
+    permissions:
+      contents: write  # for actions/create-release to create a release
     name: Create release
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       release_id: ${{ steps.create_release.outputs.id }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set Env
         run: |
           export VERSION=$(cat version.h | sed 's/[^0-9,.]//g')
@@ -59,14 +61,14 @@ jobs:
       matrix:
         # Ubuntu 18.04 because of https://github.com/probonopd/linuxdeployqt/issues/340
         # Ubuntu 18.04 because of samuelmeuli/action-snapcraft
-        os: [ubuntu-18.04, macos-latest, windows-latest]
+        os: [ubuntu-18.04, macos-latest, windows-2019]
         # Linux:   https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/
         # macOS:   https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/
         # Windows: https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/
         qt-version: ['5.15.2']
         app-image: [true, false]
         exclude:
-          - os: windows-latest
+          - os: windows-2019
             app-image: true
           - os: macos-latest
             app-image: true
@@ -77,10 +79,10 @@ jobs:
 #            qt-version: '5.13.2'
 #          - os: macos-latest
 #            qt-version: '5.13.2'
-#          - os: windows-latest
+#          - os: windows-2019
 #            qt-version: '5.15.2'
     steps:
-    - uses: actions/checkout@v2	
+    - uses: actions/checkout@v3	
       with:	
         submodules: true
     - name: Set Env
@@ -98,28 +100,27 @@ jobs:
       uses: samuelmeuli/action-snapcraft@v1
       with:
         use_lxd: true
-        # `snapcraft export-login --snaps qownnotes --channels edge,stable -`, token valid for one year  
-        snapcraft_token: ${{ secrets.SNAP_TOKEN_GH }}
+#        snapcraft_token: ${{ secrets.SNAP_TOKEN_GH }}
     - name: Cache Qt
       id: cache-qt
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ../Qt
         key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}
     # https://github.com/marketplace/actions/install-qt
     - if: contains( matrix.os, 'windows')
       name: Install Qt on Windows
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{ matrix.qt-version }}
         arch: win64_mingw81
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        cache: ${{ steps.cache-qt.outputs.cache-hit }}
     - if: false == contains( matrix.os, 'windows')
       name: Install Qt on Linux/macOS
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{ matrix.qt-version }}
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        cache: ${{ steps.cache-qt.outputs.cache-hit }}
     - name: Printenv
       shell: bash
       run: |
@@ -148,21 +149,10 @@ jobs:
         qmake PREFIX=/usr
         lrelease QOwnNotes.pro
         make -j 8
-        # Create DEB
-        #cd ../travis
-        #dpkg-deb -x QOwnNotes.deb build
-        #install ../src/QOwnNotes build/opt/QOwnNotes
-        #mkdir -p build/usr/bin
-        #ln -s /opt/QOwnNotes/QOwnNotes build/usr/bin
-        #mv ../src/languages/*.qm build/opt/QOwnNotes/
-        #mv ../icons/* build/opt/QOwnNotes/
-        #sed -i 's/VERSION_NUMBER/'"${VERSION}"'/g' build/DEBIAN/control
-        #dpkg -b build QOwnNotes.deb
-        #cd ../src
         # Create AppImage (needs Ubuntu 18.04)
         make INSTALL_ROOT=appdir -j 8 install ; find appdir/
         mkdir -p appdir/usr/languages
-        # mv tranlations to appdir (where QOwnNotes will find them)
+        # mv translations to appdir (where QOwnNotes will find them)
         mv ./languages/*.qm appdir/usr/languages
         wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
         chmod a+x linuxdeployqt-continuous-x86_64.AppImage
@@ -210,14 +200,43 @@ jobs:
         asset_name: QOwnNotes-amd64.snap
         asset_content_type: application/octet-stream
 
+#    - if: contains( matrix.os, 'ubuntu-18') && !matrix.app-image
+#      shell: bash
+#      run: |
+#        snapcraft --version
+#        cd .. && pwd
     - if: contains( matrix.os, 'ubuntu-18') && !matrix.app-image
       name: Deploy Snap
-      shell: bash
-      run: |
-        cd .. && ls
-        if [ -n "$(ls *.snap 2>/dev/null)" ]; then
-          sudo snapcraft upload *.snap --release stable
-        fi
+      uses: snapcore/action-publish@v1
+      continue-on-error: true
+      env:
+        # `snapcraft export-login --snaps=qownnotes --acls package_access,package_push,package_update,package_release -`, token valid for one year
+        SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_TOKEN_GH }}
+      with:
+        snap: /home/runner/work/QOwnNotes/QOwnNotes/qownnotes_${{ env.VERSION }}_amd64.snap
+        release: stable
+    - if: contains( matrix.os, 'ubuntu-18') && !matrix.app-image
+      uses: actions/upload-artifact@v3
+      with:
+        name: snapcraft-logs
+        path: /home/runner/.cache/snapcraft/log/snapcraft-*.log
+#    - if: contains( matrix.os, 'ubuntu-18') && !matrix.app-image
+#      name: Fail
+#      shell: bash
+#      run: curl --fail
+
+#    - if: contains( matrix.os, 'ubuntu-18') && !matrix.app-image
+#      name: Deploy Snap
+#      env:
+#        # `snapcraft export-login --snaps qownnotes --channels edge,stable -`, token valid for one year
+#        SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAP_TOKEN_GH }}
+#      shell: bash
+#      run: |
+#        snapcraft --version
+#        cd .. && ls
+#        if [ -n "$(ls *.snap 2>/dev/null)" ]; then
+#          sudo snapcraft upload *.snap --release stable
+#        fi
 
     - if: contains( matrix.os, 'ubuntu-18') && matrix.app-image
       name: Release AppImage for Linux

@@ -169,14 +169,14 @@ handleNewNoteHeadlineHook
 ### Chiamata al metodo e parametri
 ```js
 /**
- * This function is called before a note is created
- *
- * It allows you to modify the headline of the note before it is created
- * Note that you have to take care about a unique note name, otherwise
- * the new note will not be created, it will just be found in the note list
- *
- * You can use this function for creating note templates
- *
+  * Questa funzione viene chiamata prima della creazione di una nota
+  *
+  * Ti permette di modificare il titolo della nota prima che venga creata
+  * Nota che devi prenderti cura di un nome di nota univoco, altrimenti
+  * la nuova nota non verrà creata, sarà solo trovata nell'elenco delle note
+  *
+  * È possibile utilizzare questa funzione per creare modelli di note
+  *
  * @param headline text that would be used to create the headline
  * @return {string} the headline of the note
  */
@@ -191,20 +191,20 @@ preNoteToMarkdownHtmlHook
 ### Chiamata al metodo e parametri
 ```js
 /**
- * This function is called before the markdown html of a note is generated
- *
- * It allows you to modify what is passed to the markdown to html converter
- *
- * The function can for example be used in multiple scripts to render code (like LaTeX math or mermaid)
- * to its graphical representation for the preview
- *
- * The note will not be changed in this process
- *
- * @param {NoteApi} note - the note object
- * @param {string} markdown - the markdown that is about to being converted to html
- * @param {string} forExport - true if the html is used for an export, false for the preview
- * @return {string} the modified markdown or an empty string if nothing should be modified
- */
+  * Questa funzione viene chiamata prima che venga generato il markdown html di una nota
+  *
+  * Ti permette di modificare ciò che viene passato al convertitore markdown in html
+  *
+  * La funzione può ad esempio essere utilizzata in più script per il rendering del codice (come LaTeX math o mermaid)
+  * alla sua rappresentazione grafica per l'anteprima
+  *
+  * La nota non verrà modificata in questo processo
+  *
+  * @param {NoteApi} note - l'oggetto nota
+  * @param {string} markdown - il markdown che sta per essere convertito in html
+  * @param {bool} forExport - true se l'html viene utilizzato per un'esportazione, false per l'anteprima
+  * @return {string} il markdown modificato o una stringa vuota se non deve essere modificato nulla
+  */
 function preNoteToMarkdownHtmlHook(note, markdown, forExport);
 ```
 
@@ -216,16 +216,16 @@ noteToMarkdownHtmlHook
 ### Chiamata al metodo e parametri
 ```js
 /**
- * This function is called when the markdown html of a note is generated
- *
- * It allows you to modify this html
- * This is for example called before by the note preview
- *
- * The function can be used in multiple scripts to modify the html of the preview
+  * Questa funzione viene chiamata quando viene generato il markdown html di una nota
+  *
+  * Ti permette di modificare questo html
+  * Questo è ad esempio chiamato prima dall'anteprima della nota
+  *
+  * La funzione può essere utilizzata in più script per modificare l'html dell'anteprima
  *
  * @param {NoteApi} note - the note object
  * @param {string} html - the html that is about to being rendered
- * @param {string} forExport - true if the html is used for an export, false for the preview
+ * @param {bool} forExport - true if the html is used for an export, false for the preview
  * @return {string} the modified html or an empty string if nothing should be modified
  */
 function noteToMarkdownHtmlHook(note, html, forExport);
@@ -420,3 +420,21 @@ function windowStateChangedHook(windowState);
 ```
 
 Potresti voler dare un'occhiata all'esempio [window-state-changed.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/window-state-changed.qml).
+
+workspaceSwitchedHook
+----------------------
+
+This hook is called when workspaces are switched.
+
+### Chiamata al metodo e parametri
+```js
+/**
+ * This function is called when workspaces are switched
+ *
+ * @param oldUuid old uuid of workspace
+ * @param newUuid new uuid of workspace
+ */
+function workspaceSwitchedHook(oldUuid, newUuid);
+```
+
+Potresti voler dare un'occhiata all'esempio [websocket-raw-data-new-note.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/workspaces.qml).

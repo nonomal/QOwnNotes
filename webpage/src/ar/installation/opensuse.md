@@ -21,9 +21,11 @@ zypper install opi
 opi qownnotes
 ```
 
-::: warning ستسأل هذه الأداة خدمة OBS بكاملها، لذا تأكد من أن تختار `qownnotes` وليس `qownnotes-lang` إذا سئلت.
+::: warning
+ستسأل هذه الأداة خدمة OBS بكاملها، لذا تأكد من أن تختار `qownnotes` وليس `qownnotes-lang` إذا سئلت.
 
-تأكد أيضا من أن المستودع المختار هو الرسمي `home:pbek:QOwnNotes` وليس مستودع طرف ثالث. :::
+تأكد أيضا من أن المستودع المختار هو الرسمي `home:pbek:QOwnNotes` وليس مستودع طرف ثالث.
+:::
 
 ::: tip
 تحتاج إلى تحديد خيار الإبقاء على المستودع بعد التثبيت للحصول على التحديثات.
@@ -64,66 +66,6 @@ zypper install qownnotes
 ```
 
 [تنزيل مباشر](https://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_15.2)
-
-## openSUSE Leap 15.1
-
-```bash
-zypper addrepo -f http://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_15.1/home:pbek:QOwnNotes.repo
-zypper refresh
-zypper install qownnotes
-```
-
-[تنزيل مباشر](https://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_15.1)
-
-## openSUSE Leap 15.0
-
-نفّذ الأوامر التالية في الطرفية بصلاحيات الجذر لإضافة المستودع وتثبيت QOwnNotes منه.
-
-```bash
-zypper addrepo -f http://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_15.0/home:pbek:QOwnNotes.repo
-zypper refresh
-zypper install qownnotes
-```
-
-[تنزيل مباشر](https://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_15.0)
-
-## openSUSE Leap 42.3
-
-نفّذ الأمر التالي في الطرفية بصلاحيات الجذر لاستيثاق المستودع.
-
-```bash
-su -
-rpm --import http://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_42.3/repodata/repomd.xml.key
-```
-
-نفّذ الأوامر التالية في الطرفية بصلاحيات الجذر لإضافة المستودع وتثبيت QOwnNotes منه.
-
-```bash
-zypper addrepo -f http://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_42.3/home:pbek:QOwnNotes.repo
-zypper refresh
-zypper install qownnotes
-```
-
-[تنزيل مباشر](https://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_42.3)
-
-## openSUSE Leap 42.2
-
-نفّذ الأمر التالي في الطرفية بصلاحيات الجذر لاستيثاق المستودع.
-
-```bash
-su -
-rpm --import http://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_42.2/repodata/repomd.xml.key
-```
-
-نفّذ الأوامر التالية في الطرفية بصلاحيات الجذر لإضافة المستودع وتثبيت QOwnNotes منه.
-
-```bash
-zypper addrepo -f http://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_42.2/home:pbek:QOwnNotes.repo
-zypper refresh
-zypper install qownnotes
-```
-
-[تنزيل مباشر](https://download.opensuse.org/repositories/home:/pbek:/QOwnNotes/openSUSE_Leap_42.2)
 
 ## openSUSE Tumbleweed
 

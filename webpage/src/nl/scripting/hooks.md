@@ -180,17 +180,17 @@ preNoteToMarkdownHtmlHook
   *
   * Hiermee kunt u wijzigen wat wordt doorgegeven aan de markdown naar html-converter
   *
-  * De functie kan bijvoorbeeld in meerdere scripts worden gebruikt om code te renderen (zoals LaTeX wiskunde of zeemeermin)
+  * De functie kan bijvoorbeeld in meerdere scripts worden gebruikt om code weer te geven (zoals LaTeX wiskunde of zeemeermin)
   * naar de grafische weergave voor de preview
   *
   * De notitie wordt tijdens dit proces niet gewijzigd
   *
   * @param {NoteApi} notitie - het notitieobject
   * @param {string} markdown - de markdown die op het punt staat te worden geconverteerd naar html
-  * @param {string} forExport - waar als de html wordt gebruikt voor een export, onwaar voor het voorbeeld
+  * @param {bool} forExport - waar als de html wordt gebruikt voor een export, onwaar voor het voorbeeld
   * @return {string} de gewijzigde afwaardering of een lege tekenreeks als er niets moet worden gewijzigd
   */
-function preNoteToMarkdownHtmlHook(note, markdown, forExport);
+functie preNoteToMarkdownHtmlHook(note, markdown, forExport);
 ```
 
 Misschien wilt u het voorbeeld eens bekijken [preview-styling.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/preview-styling.qml).
@@ -210,10 +210,10 @@ noteToMarkdownHtmlHook
   *
   * @param {NoteApi} notitie - het notitieobject
   * @param {string} html - de html die op het punt staat te worden weergegeven
-  * @param {string} forExport - waar als de html wordt gebruikt voor een export, onwaar voor het voorbeeld
+  * @param {bool} forExport - waar als de html wordt gebruikt voor een export, onwaar voor het voorbeeld
   * @return {string} de gewijzigde html of een lege string als er niets gewijzigd moet worden
   */
-function noteToMarkdownHtmlHook(note, html, forExport);
+functie noteToMarkdownHtmlHook(note, html, forExport);
 ```
 
 Misschien wilt u het voorbeeld eens bekijken [voorbeeld.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/example.qml) of [preview-styling.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/preview-styling.qml).
@@ -381,3 +381,21 @@ functie windowStateChangedHook (windowState);
 ```
 
 Misschien wilt u het voorbeeld eens bekijken [window-state-changed.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/window-state-changed.qml).
+
+workspaceSwitchedHook
+----------------------
+
+This hook is called when workspaces are switched.
+
+### Methodeaanroep en parameters
+```js
+/**
+ * This function is called when workspaces are switched
+ *
+ * @param oldUuid old uuid of workspace
+ * @param newUuid new uuid of workspace
+ */
+function workspaceSwitchedHook(oldUuid, newUuid);
+```
+
+Misschien wil je het voorbeeld bekijken [websocket-raw-data-new-note.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/workspaces.qml).

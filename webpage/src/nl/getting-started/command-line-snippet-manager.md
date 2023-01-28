@@ -67,9 +67,13 @@ U kunt **ongeordende lijsten met in-line codeblokken** gebruiken om opdrachtfrag
 Als je een `cmd:` toevoegt voor het in-line codeblok, zal het commando ook gevonden worden in de **huidige notitie** ongeacht notitietags.
 
 ```markdown
-- `echo I am a command` Ik ben een beschrijving #tag1 #tag2 #tag3
-* `echo I am also a command`Ik ben een beschrijving #tag3 #tag4 #tag5
-- cmd: `echo Ik zal worden gevonden in de huidige notitie` Dit commando zal worden gevonden in de huidige notitie, ongeacht notitietags
+- `echo ik ben een commando` ik ben een beschrijving #tag1 #tag2 #tag3
+* `echo ik ben ook een commando` ik ben een beschrijving #tag3 #tag4 #tag5
+- cmd: `echo I zal worden gevonden in de huidige notitie` Dit commando zal worden gevonden in de huidige notitie, ongeacht notitietags
+
+<!-- Voorbeeld om gebruikersinvoer te vragen -->
+
+- `read -p "PR ID: " id && git fetch origin pull/$id/head:pull-$id && git checkout pull-$id` Vraag om een pull-verzoek-ID en check-out pull-verzoek
 ```
 
 **`bash` of `shell` codeblokken**, voorafgegaan door een kop 2 of hoger als beschrijving, kunnen ook worden gebruikt voor opdrachtfragmenten. Tags worden ook ondersteund als ze tussen de kop en het codeblok staan.

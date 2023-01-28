@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,8 +41,7 @@ class FontColorWidget : public QFrame {
 
     void on_colorSchemeComboBox_currentIndexChanged(int index);
 
-    void on_textTreeWidget_currentItemChanged(QTreeWidgetItem *current,
-                                              QTreeWidgetItem *previous);
+    void on_textTreeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
     void on_copySchemeButton_clicked();
 
@@ -88,11 +87,9 @@ class FontColorWidget : public QFrame {
 
     void updateSchemeEditFrame();
 
-    void setSchemaValue(const QString &key, const QVariant &value,
-                        QString schemaKey = QString());
+    void setSchemaValue(const QString &key, const QVariant &value, QString schemaKey = QString());
 
-    QString textSettingsKey(const QString &key,
-                            QTreeWidgetItem *item = nullptr);
+    QString textSettingsKey(const QString &key, QTreeWidgetItem *item = nullptr);
 
     void updateTextItem(QTreeWidgetItem *item = nullptr);
 

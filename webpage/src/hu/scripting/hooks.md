@@ -187,10 +187,10 @@ preNoteToMarkdownHtmlHook
   *
   * @param {NoteApi} note – a jegyzetobjektum
   * @param {string} leértékelés – az a leértékelés, amelyet hamarosan html-vé alakítanak
-  * @param {string} forExport - igaz, ha a html-t az exportáláshoz használja, hamis az előnézethez
+  * @param {bool} forExport - igaz, ha a html-t az exportáláshoz használja, hamis az előnézethez
   * @return {string} a módosított jelölést vagy üres karakterláncot, ha semmit sem kell módosítani
   */
-function preNoteToMarkdownHtmlHook(note, markdown, forExport);
+függvény preNoteToMarkdownHtmlHook(note, markdown, forExport);
 ```
 
 Érdemes megnézni a példát [preview-styling.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/preview-styling.qml).
@@ -208,12 +208,12 @@ noteToMarkdownHtmlHook
   *
   * A funkció több szkriptben is használható az előnézet html-jének módosítására
   *
- * @param {NoteApi} jegyzet - a jegyzetobjektum
- * @param {string} html - a html, amely hamarosan megjelenik
- * @param {string} forExport - igaz, ha a html-t exportáláshoz használja, hamis az előnézethez
- * @return {string} a módosított html vagy egy üres karakterlánc, ha semmit sem kell módosítani
- */
-function noteToMarkdownHtmlHook(note, html, forExport);
+  * @param {NoteApi} note – a jegyzetobjektum
+  * @param {karakterlánc} html - a html, amely hamarosan megjelenik
+  * @param {bool} forExport - igaz, ha a html-t az exportáláshoz használja, hamis az előnézethez
+  * @return {string} a módosított html-t vagy egy üres karakterláncot, ha semmit sem kell módosítani
+  */
+függvény noteToMarkdownHtmlHook(note, html, forExport);
 ```
 
 Érdemes megnézni a példát [example.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/example.qml) vagy [preview-styling.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/preview-styling.qml).
@@ -380,3 +380,21 @@ függvény windowStateChangedHook (windowState);
 ```
 
 Érdemes megnézni a példát [window-state-changed.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/window-state-changed.qml).
+
+workspaceSwitchedHook
+----------------------
+
+This hook is called when workspaces are switched.
+
+### Módszerhívás és paraméterek
+```js
+/**
+ * This function is called when workspaces are switched
+ *
+ * @param oldUuid old uuid of workspace
+ * @param newUuid new uuid of workspace
+ */
+function workspaceSwitchedHook(oldUuid, newUuid);
+```
+
+Érdemes lehet egy pillantást vetni a példára [websocket-raw-data-new-note.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/workspaces.qml).

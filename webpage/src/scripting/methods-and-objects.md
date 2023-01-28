@@ -378,7 +378,7 @@ script.registerLabel("long-label", "another very long text, another very long te
 script.registerLabel("counter-label");
 ```
 
-The labels will be visible in the scripting dock widget.
+The labels will be visible in the *Scripting panel*, which you need to enable in the *Window / Panels* menu.
 
 You can use both plain text or html in the labels. The text will be
 selectable and links can be clicked.
@@ -554,7 +554,7 @@ Select the current word in the note text edit
 ### Method call and parameters
 ```cpp
 /**
- * Selects the current line in the note text edit
+ * Selects the current word in the note text edit
  */
 void ScriptingService::noteTextEditSelectCurrentWord();
 ```
@@ -974,14 +974,18 @@ Jumping to a note
  * Sets the current note if the note is visible in the note list
  *
  * @param note NoteApi note to jump to
+ * @param asTab bool if true the note will be opened in a new tab (if not already open)
  */
-void ScriptingService::setCurrentNote(NoteApi *note);
+void ScriptingService::setCurrentNote(NoteApi *note, bool asTab = false);
 ```
 
 ### Example
 ```js
 // jump to the note
 script.setCurrentNote(note);
+
+// open note in new tab (if not already open)
+script.setCurrentNote(note, true);
 ```
 
 You may want to take a look at the example
@@ -1137,6 +1141,7 @@ property bool myBoolean;
 property string myText;
 property int myInt;
 property string myFile;
+property string myDirectory;
 property string mySelection;
 
 // register your settings variables so the user can set them in the script settings
@@ -1180,6 +1185,13 @@ property variant settingsVariables: [
         "description": "Please select the file:",
         "type": "file",
         "default": "pandoc",
+    },
+    {
+        "identifier": "myDirectory",
+        "name": "I am a directory selector",
+        "description": "Please select the directory:",
+        "type": "directory",
+        "default": "/home",
     },
     {
         "identifier": "mySelection",

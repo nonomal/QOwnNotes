@@ -132,7 +132,7 @@ bool NoteApi::removeTag(QString tagName) {
  * @param newName new file name (without file-extension)
  * @return true if the note was renamed
  */
-bool NoteApi::renameNoteFile(const QString &newName) {
+bool NoteApi::renameNoteFile(const QString& newName) {
     Note note = Note::fetch(_id);
 
     if (note.isFetched()) {
@@ -147,9 +147,7 @@ bool NoteApi::renameNoteFile(const QString &newName) {
  *
  * @return bool
  */
-bool NoteApi::allowDifferentFileName() {
-    return Note::allowDifferentFileName();
-}
+bool NoteApi::allowDifferentFileName() { return Note::allowDifferentFileName(); }
 
 /**
  * Fetches all notes
@@ -181,8 +179,7 @@ QQmlListProperty<NoteApi> NoteApi::fetchAll(int limit, int offset) {
  * @return
  */
 QString NoteApi::toMarkdownHtml(bool forExport) {
-    return _note.toMarkdownHtml(NoteFolder::currentLocalPath(), 980, forExport,
-                                true, true);
+    return _note.toMarkdownHtml(NoteFolder::currentLocalPath(), 980, forExport, true, true);
 }
 
 /**
@@ -193,4 +190,23 @@ QString NoteApi::toMarkdownHtml(bool forExport) {
  */
 QString NoteApi::getFileURLFromFileName(const QString& localFileName) {
     return _note.getFileURLFromFileName(localFileName);
+}
+
+void NoteApi::copy(const Note& note) {
+    _note = note;
+
+    if (_note.isFetched()) {
+        _id = note.getId();
+        _name = note.getName();
+        _fileName = note.getFileName();
+        _noteText = note.getNoteText();
+        _hasDirtyData = note.getHasDirtyData();
+        _noteSubFolderId = note.getNoteSubFolderId();
+        _fileCreated = note.getFileCreated();
+        _fileLastModified = note.getFileLastModified();
+
+        // we'll try not to fetch the decrypted note text, because it
+        // would be done every time the current note changes
+        _decryptedNoteText = note.getDecryptedNoteText();
+    }
 }

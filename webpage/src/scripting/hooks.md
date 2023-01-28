@@ -202,7 +202,7 @@ preNoteToMarkdownHtmlHook
  *
  * @param {NoteApi} note - the note object
  * @param {string} markdown - the markdown that is about to being converted to html
- * @param {string} forExport - true if the html is used for an export, false for the preview
+ * @param {bool} forExport - true if the html is used for an export, false for the preview
  * @return {string} the modified markdown or an empty string if nothing should be modified
  */
 function preNoteToMarkdownHtmlHook(note, markdown, forExport);
@@ -226,7 +226,7 @@ noteToMarkdownHtmlHook
  *
  * @param {NoteApi} note - the note object
  * @param {string} html - the html that is about to being rendered
- * @param {string} forExport - true if the html is used for an export, false for the preview
+ * @param {bool} forExport - true if the html is used for an export, false for the preview
  * @return {string} the modified html or an empty string if nothing should be modified
  */
 function noteToMarkdownHtmlHook(note, html, forExport);
@@ -436,3 +436,22 @@ function windowStateChangedHook(windowState);
 
 You may want to take a look at the example
 [window-state-changed.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/window-state-changed.qml).
+
+workspaceSwitchedHook
+----------------------
+
+This hook is called when workspaces are switched.
+
+### Method call and parameters
+```js
+/**
+ * This function is called when workspaces are switched
+ *
+ * @param oldUuid old uuid of workspace
+ * @param newUuid new uuid of workspace
+ */
+function workspaceSwitchedHook(oldUuid, newUuid);
+```
+
+You may want to take a look at the example
+[websocket-raw-data-new-note.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/workspaces.qml).

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,7 @@ struct Node {
     int elementType;
 
     bool operator==(const Node &node) const {
-        return text == node.text && pos == node.pos &&
-               elementType == node.elementType;
+        return text == node.text && pos == node.pos && elementType == node.elementType;
     }
 };
 
@@ -42,8 +41,7 @@ class NavigationWidget : public QTreeWidget {
     void selectItemForCursorPosition(int position);
 
    private slots:
-    void onCurrentItemChanged(QTreeWidgetItem *current,
-                              QTreeWidgetItem *previous);
+    void onCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void onItemClicked(QTreeWidgetItem *current, int column);
 
    private:

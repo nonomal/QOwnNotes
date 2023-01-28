@@ -343,7 +343,7 @@ Enregistrer une étiquette
 ### Appel de méthode et paramètres
 ```cpp
 /**
- * Registers a label to write to
+ * Enregistre une étiquette sur laquelle écrire
  *
  * @param identifier the identifier of the label
  * @param text the text shown in the label (optional)
@@ -360,7 +360,7 @@ script.registerLabel("long-label", "encore un très long texte, encore un très 
 script.registerLabel("counter-label");
 ```
 
-Les étiquettes seront visibles dans le widget de scripting du dock.
+Les étiquettes seront visibles dans le panneau *Écriture de scripts*, activable depuis le menu *Fenêtres / Panneaux*.
 
 Vous pouvez utiliser à la fois du texte brut ou du HTML dans les étiquettes. Le texte sera sélectionnable et les liens pourront être cliqués.
 
@@ -523,7 +523,7 @@ Sélectionner le mot actuel dans le texte de la note
 ### Appel de méthode et paramètres
 ```cpp
 /**
- * Sélectionne le mot actuel dans le texte de la note
+ * Sélectionne la ligne actuelle dans l'édition du texte de la note
  */
 void ScriptingService::noteTextEditSelectCurrentWord();
 ```
@@ -920,17 +920,21 @@ Sauter vers une note
 ### Appel de méthode et paramètres
 ```cpp
 /**
- * Définit la note actuelle si la note est visible dans la liste des notes
+ * Définit la note courante si la note est visible dans la liste des notes
  *
- * @param note NoteApi note pour passer à
+ * @param note NoteApi note vers laquelle sauter
+ * @param asTab bool si vrai la note sera ouverte dans un nouvel onglet (si pas déjà ouverte)
  */
-void ScriptingService::setCurrentNote(NoteApi *note);
+void ScriptingService::setCurrentNote(NoteApi *note, bool asTab = false);
 ```
 
 ### Exemple
 ```js
-// sauter vers la note
-script.setCurrentNote (note);
+// sauter à la note
+script.setCurrentNote(note);
+
+// ouvrir la note dans un nouvel onglet (si pas déjà ouverte)
+script.setCurrentNote(note, true);
 ```
 
 Vous voudrez peut-être jeter un coup d'œil à l'exemple [journal-entry.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/journal-entry.qml).
@@ -1075,29 +1079,30 @@ L'utilisateur peut ensuite définir ces propriétés dans les paramètres du scr
 
 ### Exemple
 ```js
-// vous devez définir les variables enregistrées pour pouvoir y accéder plus tard
-property string myString;
-property bool myBoolean;
-property string myText;
-property int myInt;
-property string myFile;
-property string mySelection;
+// vous devez définir vos variables déclarées pour pouvoir y accéder ultérieurement
+property string maChaine;
+property bool monBooleen;
+property string monTexte;
+property int monInt;
+property string monFichier;
+property string monEmplacement;
+property string maSelection;
 
-// enregistrez vos variables de paramètres pour que l'utilisateur puisse les définir dans les paramètres du script
+// déclarez vos variables de paramétrage afin que l'utilisateur puisse les définir dans les paramètres du script
 //
-// il n'y a malheureusement pas de QVariantHash dans Qt, nous pouvons seulement utiliser
-// QVariantMap (qui n'a pas de classement arbitraire) or QVariantList (qui
-// peut être ordonné arbitrairement)
+// malheureusement il n'existe pas de QVariantHash dans Qt, nous ne pouvons utiliser que
+// QVariantMap (qui n'a pas d'ordonnancement arbitraire) oo QVariantList (qui peut au moins
+// être ordonné arbitrairement)
 property variant settingsVariables: [
     {
-        "identifier": "myString",
-        "name": "Je suis une édition de ligne",
+        "identifier": "maChaine",
+        "name": "Je sus une édition de ligne",
         "description": "Veuillez entrer une chaîne valide :",
         "type": "string",
         "default": "Ma valeur par défaut",
     },
     {
-        "identifier": "myBoolean",
+        "identifier": "monBooleen",
         "name": "Je suis une case à cocher",
         "description": "Une description",
         "text": "Cochez cette case",
@@ -1105,30 +1110,37 @@ property variant settingsVariables: [
         "default": true,
     },
     {
-        "identifier": "myText",
+        "identifier": "monTexte",
         "name": "Je suis une boîte de texte",
         "description": "Veuillez entrer votre texte :",
         "type": "text",
-        "default": "Ceci peut être un très long texte \navec plusieurs lignes.",
+        "default": "Ceci peut être un texte très long\nsur plusieurs lignes.",
     },
     {
-        "identifier": "myInt",
-        "name": "Je suis un sélecteur de chiffres",
+        "identifier": "monInt",
+        "name": "Je suis un sélecteur de chiffre",
         "description": "Veuillez entrer un chiffre :",
         "type": "integer",
         "default": 42,
     },
     {
-        "identifier": "myFile",
-        "name": "Je suis un sélecteur de fichiers",
-        "description": "Veuillez sélectionner un fichier :",
+        "identifier": "monFichier",
+        "name": "Je suis un sélecteur de fichier",
+        "description": "Veuillez sélectionner le fichier :",
         "type": "file",
         "default": "pandoc",
     },
     {
-        "identifier": "mySelection",
-        "name": "Je suis un sélecteur d'éléments",
-        "description": "Veuillez sélectionner un élément:",
+        "identifier": "monEmplacement",
+        "name": "Je suis un sélecteur d'emplacement",
+        "description": "Veuillez sélectionner un emplacement :",
+        "type": "directory",
+        "default": "/home",
+    },
+    {
+        "identifier": "maSelection",
+        "name": "Je suis un sélecteur d'item",
+        "description": "Veuillez sélectionner un item :",
         "type": "selection",
         "default": "option2",
         "items": {"option1": "Texte pour option 1", "option2": "Texte pour option 2", "option3": "Texte pour option 3"},
@@ -1553,21 +1565,21 @@ Vous pouvez également écouter les sockets avec `WebSocket`. Veuillez jeter un 
 
 Gardez à l'esprit que vous devez avoir la bibliothèque QML `websocket` de Qt installée pour utiliser cette fonction. Par exemple, sous Ubuntu Linux vous pouvez installer `module-qml-qtwebsockets`.
 
-Adding a highlighting rule for the editor
+Ajout d'une règle de mise en évidence pour l'éditeur
 -----------------------------------------
 
-You can directly inject highlighting rules into the editor by defining regular expressions and assigning them to a highlighting state.
+Il est possible d'injecter des règles de mise en évidence directement dans l'éditeur en définissant et assignant des expressions régulières à un état de mise en évidence.
 
-### Method call and parameters
+### Appel de méthode et paramètres
 ```cpp
 /**
- * Adds a highlighting rule to the syntax highlighter of the editor
+ * Ajout d'une règle de mise en évidence au surligneur de syntaxe de l'éditeur
  *
- * @param pattern {QString} the regular expression pattern to highlight
- * @param shouldContain {QString} a string that must be contained in the highlighted text for the pattern to be parsed
- * @param state {int} the state of the syntax highlighter to use
- * @param capturingGroup {int} the capturing group for the pattern to use for highlighting (default: 0)
- * @param maskedGroup {int} the capturing group for the pattern to use for masking (default: 0)
+ * @param pattern {QString} le motif d'expression régulière à mettre en évidence
+ * @param shouldContain {QString} une chaîne qui doit être contenue dans le texte mis en évidence pour que le motif soit analysé syntaxiquement
+ * @param state {int} l'état du surligneur de syntaxe à utiliser
+ * @param capturingGroup {int} le groupe de capture du motif à utiliser pour la mise en évidence (par défaut : 0)
+ * @param maskedGroup {int} le groupe de capture du motif à utiliser pour la mise en évidence (par défault : 0)
  */
 void ScriptingService::addHighlightingRule(const QString &pattern,
                                            const QString &shouldContain,
@@ -1576,39 +1588,39 @@ void ScriptingService::addHighlightingRule(const QString &pattern,
                                            int maskedGroup);
 ```
 
-### Highlighting states
+### États de mise en évidence
 
-| Name                       | Nr. |
-| -------------------------- | --- |
-| NoState                    | -1  |
-| Link                       | 0   |
-| Image                      | 3   |
-| CodeBlock                  | 4   |
-| CodeBlockComment           | 5   |
-| Italic                     | 7   |
-| Bold                       | 8   |
-| List                       | 9   |
-| Comment                    | 11  |
-| H1                         | 12  |
-| H2                         | 13  |
-| H3                         | 14  |
-| H4                         | 15  |
-| H5                         | 16  |
-| H6                         | 17  |
-| BlockQuote                 | 18  |
-| HorizontalRuler            | 21  |
-| Table                      | 22  |
-| InlineCodeBlock            | 23  |
-| MaskedSyntax               | 24  |
-| CurrentLineBackgroundColor | 25  |
-| BrokenLink                 | 26  |
-| FrontmatterBlock           | 27  |
-| TrailingSpace              | 28  |
-| CheckBoxUnChecked          | 29  |
-| CheckBoxChecked            | 30  |
-| StUnderline                | 31  |
+| Nom                        | Numéro |
+| -------------------------- | ------ |
+| NoState                    | -1     |
+| Lien                       | 0      |
+| Image                      | 3      |
+| CodeBlock                  | 4      |
+| CodeBlockComment           | 5      |
+| Italic                     | 7      |
+| Gras                       | 8      |
+| List                       | 9      |
+| Commentaire                | 11     |
+| H1                         | 12     |
+| H2                         | 13     |
+| H3                         | 14     |
+| H4                         | 15     |
+| H5                         | 16     |
+| H6                         | 17     |
+| BlockQuote                 | 18     |
+| HorizontalRuler            | 21     |
+| Table                      | 22     |
+| InlineCodeBlock            | 23     |
+| MaskedSyntax               | 24     |
+| CurrentLineBackgroundColor | 25     |
+| BrokenLink                 | 26     |
+| FrontmatterBlock           | 27     |
+| TrailingSpace              | 28     |
+| CheckBoxUnChecked          | 29     |
+| CheckBoxChecked            | 30     |
+| StUnderline                | 31     |
 
-### Example
+### Exemple
 ```js
 // Highlight a text line like "BLOCK: some text" as blockquote (state 18)
 script.addHighlightingRule("^BLOCK: (.+)", "BLOCK:", 18);

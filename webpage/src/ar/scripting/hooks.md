@@ -205,7 +205,7 @@ preNoteToMarkdownHtmlHook (خطاف ما قبل تحويل الملاحظة من
  *
  * @param {NoteApi} note - the note object
  * @param {string} markdown - the markdown that is about to being converted to html
- * @param {string} forExport - true if the html is used for an export, false for the preview
+ * @param {bool} forExport - true if the html is used for an export, false for the preview
  * @return {string} the modified markdown or an empty string if nothing should be modified
  */
 function preNoteToMarkdownHtmlHook(note, markdown, forExport);
@@ -228,7 +228,7 @@ noteToMarkdownHtmlHook (خطاف تحويل الملاحظة من ماركداو
  *
  * @param {NoteApi} note - the note object
  * @param {string} html - the html that is about to being rendered
- * @param {string} forExport - true if the html is used for an export, false for the preview
+ * @param {bool} forExport - true if the html is used for an export, false for the preview
  * @return {string} the modified html or an empty string if nothing should be modified
  */
 function noteToMarkdownHtmlHook(note, html, forExport);
@@ -294,7 +294,9 @@ function noteTaggingHook(note, action, tagName, newTagName);
 
 ربما تحب أن تلقي نظرة على المثال [note-tagging.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/note-tagging.qml) لتنفيذ آلية وسم خاصة بك.
 
-::: warning اجعل إجراء السرد، `list`، الخاص بك سريعا جدا، لأنه سينفذ لكل ملاحظة كل مرة يُعاد فيها تحميل مجلدها! :::
+::: warning
+اجعل إجراء السرد، `list`، الخاص بك سريعا جدا، لأنه سينفذ لكل ملاحظة كل مرة يُعاد فيها تحميل مجلدها!
+:::
 
 noteTaggingByObjectHook (خطاف وسم الملاحظات الكائني)
 ----------------------
@@ -399,3 +401,23 @@ function windowStateChangedHook(windowState);
 ```
 
 ربما تحب أن تلقي نظرة على المثال [window-state-changed.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/window-state-changed.qml).
+
+workspaceSwitchedHook (خطاف تبديل مساحة العمل)
+----------------------
+
+يُنادى هذا الخطاف عند تبديل مساحة العمل.
+
+### نداء الدالة ومُعامِلاتها
+```js
+/**
+ * تُنادى هذه الدالة عند تبديل مساحات العمل
+ *
+ * @param oldUuid
+ *       المعرف العالمي الفريد لمساحة العمل القديمة
+ * @param newUuid
+ *       المعرف العالمي الفريد لمساحة العمل الجديدة
+ */
+function workspaceSwitchedHook(oldUuid, newUuid);
+```
+
+ربما تحب أن تلقي نظرة على المثال [websocket-raw-data-new-note.qml](https://github.com/pbek/QOwnNotes/blob/develop/docs/scripting/examples/workspaces.qml).

@@ -17,7 +17,7 @@
   <v-carousel-item>
     <img src="/screenshots/screenshot-vertical.png" alt="Vertical view" />
     <div class="sheet">
-      View your notes in a vertical markdown view by moving the panels
+      أظهر ملاحظاتك رأسيًا بتحريك اللوحات
     </div>
   </v-carousel-item>
   <v-carousel-item>
@@ -141,7 +141,9 @@
 
 [QOwnNotes](https://www.qownnotes.org/) هو تطبيق **حر ومفتوح المصدر** (بترخيص GPL) **لتدوين الملاحظات بصيغة ماركداون** في ملفات نصية مجردة، لأنظمة **غنو/لينكس** و**ماك&nbsp;أو&nbsp;إس** و**ويندوز**، والذي (اختياريًا) يعمل مع [**تطبيق Notes**](https://github.com/nextcloud/notes) من [Nextcloud](https://nextcloud.com/) و&nbsp;[ownCloud](https://owncloud.org/).
 
-::: tip انضم إلى [مجموعتنا على تيليجرام](https://t.me/QOwnNotes) للنقاش والتعلم والتواصل مع مجتمع QOwnNotes. :::
+::: tip
+انضم إلى [مجموعتنا على تيليجرام](https://t.me/QOwnNotes) للنقاش والتعلم والتواصل مع مجتمع QOwnNotes.
+:::
 
 [نظرة على مفاهيم QOwnNotes](concept.md)
 

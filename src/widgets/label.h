@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Patrizio Bekerle -- <patrizio@bekerle.com>
+ * Copyright (c) 2014-2023 Patrizio Bekerle -- <patrizio@bekerle.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,7 @@ class Label : public QLabel {
     Q_OBJECT
 
    public:
-    explicit Label(QWidget *parent = nullptr,
-                   Qt::WindowFlags f = Qt::WindowFlags());
+    explicit Label(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     explicit Label(const QString &text, QWidget *parent = nullptr,
                    Qt::WindowFlags f = Qt::WindowFlags());
 

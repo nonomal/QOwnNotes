@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QXmlStreamReader>
+
 #include "masterdialog.h"
 
 namespace Ui {
@@ -7,7 +9,6 @@ class EvernoteImportDialog;
 }
 
 class Note;
-class QXmlQuery;
 class QTreeWidgetItem;
 
 class EvernoteImportDialog : public MasterDialog {
@@ -33,6 +34,10 @@ class EvernoteImportDialog : public MasterDialog {
    private:
     Ui::EvernoteImportDialog *ui;
     int _importCount;
+    QHash<QString, MediaFileData> _mediaFileDataHash;
+    QHash<QString, MediaFileData> _attachmentFileDataHash;
+    QHash<QString, QString> _metaDataAttributeHash;
+    QString _metaDataTableText;
 
     void setupMetaDataTreeWidgetItems();
 
@@ -40,32 +45,24 @@ class EvernoteImportDialog : public MasterDialog {
 
     void initNoteCount(const QString &data);
 
-    QString getMarkdownForMediaFileData(Note note,
-                                        const MediaFileData &mediaFileData);
+    QString getMarkdownForMediaFileData(Note note, const MediaFileData &mediaFileData);
 
-    QString getMarkdownForAttachmentFileData(
-        Note note, const MediaFileData &mediaFileData);
+    QString getMarkdownForAttachmentFileData(Note note, const MediaFileData &mediaFileData);
 
-    QTreeWidgetItem *addMetaDataTreeWidgetItem(
-        const QString &name, const QString &attributeName = QString(),
-        QTreeWidgetItem *parentItem = nullptr);
+    QTreeWidgetItem *addMetaDataTreeWidgetItem(const QString &name,
+                                               const QString &attributeName = QString(),
+                                               QTreeWidgetItem *parentItem = nullptr);
 
     bool isMetaDataChecked();
-
-
-    /** These require xml patterns **/
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    void importNotes(const QString &data);
-
-    int countNotes(const QString &data);
-
-    QString importImages(const Note &note, QString content, QXmlQuery query);
-
-    void tagNote(QXmlQuery &query, Note &note);
-
-    QString importAttachments(const Note &note, QString content,
-                              QXmlQuery query);
-
-    QString generateMetaDataMarkdown(QXmlQuery query);
-#endif
+    void importNotes(QXmlStreamReader &xml);
+    Note parseNote(QXmlStreamReader &xml, bool importMetaData = false);
+    void parseResource(QXmlStreamReader &xml);
+    void importImages(const Note &note, QString &content);
+    void importAttachments(const Note &note, QString &content);
+    void parseMetaDataItem(QXmlStreamReader &xml, bool isNoteAttribute = false);
+    void determineMetaDataAttributes();
+    QString compileMetaDataText();
+    void parseNoteAttributes(QXmlStreamReader &xml);
+    void tagNote(Note &note, QStringList &tagNames);
+    void resetNoteCount();
 };

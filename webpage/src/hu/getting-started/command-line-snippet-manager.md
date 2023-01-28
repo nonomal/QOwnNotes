@@ -69,7 +69,11 @@ Ha a soron belüli kódblokk elé egy `cmd:` karakterláncot ad hozzá, a paranc
 ```markdown
 - `visszhang Én vagyok a parancs` Leírás vagyok #tag1 #tag2 #tag3
 * `visszhang Én is parancs vagyok` Leírás vagyok #tag3 #tag4 #tag5
-- cmd: `echo I megtalálható lesz az aktuális jegyzetben` Ez a parancs megtalálható az aktuális jegyzetben, függetlenül a jegyzetcímkéktől
+- cmd: `echo I megtalálható lesz az aktuális jegyzetben` Ez a parancs megtalálható az aktuális jegyzetben a jegyzetcímkéktől függetlenül
+
+<!-- Példa a felhasználói bevitel kérésére -->
+
+- `read -p "PR ID: " id && git lekérési eredet pull/$id/head:pull-$id && git checkout pull-$id` Kérjen lekérési azonosítót és lekérési kérést
 ```
 
 A **`bash` vagy `shell` kódblokkok**, amelyeket leírásként 2-es vagy magasabb címsor előz meg, szintén használhatók parancsrészletekhez. A címkék is támogatottak, ha a címsor és a kódblokk között vannak.
